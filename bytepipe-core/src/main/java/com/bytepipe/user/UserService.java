@@ -1,5 +1,6 @@
 package com.bytepipe.user;
 
+import com.bytepipe.alert.mail.EmailTemplate;
 import com.bytepipe.alert.mail.verification.EmailVerificationService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -7,6 +8,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.annotation.Validated;
+import org.thymeleaf.context.Context;
 
 @Service
 @Validated
@@ -25,7 +27,16 @@ public class UserService {
         if(userRepository.existsByEmail(user.getEmail())){
             throw new UserExistsException(user.getEmail());
         }
-        user.setEnabled(!IdentityProvider.SELF.equals(user.getIdentityProvider()));
+        if(IdentityProvider.SELF.equals(user.getIdentityProvider())){
+            user.setEnabled(false);
+            final Context context = new Context();
+            context.setVariable("user", user);
+            emailVerificationService.initiate(user.getEmail(),
+                    "Please verify your email",
+                    EmailTemplate.EMAIL_VERIFICATION,
+                    context);
+        }
+
         return userRepository.save(user);
     }
 

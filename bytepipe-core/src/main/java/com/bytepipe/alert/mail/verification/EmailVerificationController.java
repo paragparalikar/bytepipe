@@ -15,7 +15,7 @@ public class EmailVerificationController {
     private final EmailVerificationService emailVerificationService;
 
     @GetMapping("/{id}")
-    public String verify(@PathVariable @NotBlank String id){
+    public String verify(@PathVariable("id") @NotBlank String id){
         try {
             emailVerificationService.verify(id);
             return "email-verification-success";
