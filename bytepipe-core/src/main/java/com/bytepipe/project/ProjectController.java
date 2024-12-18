@@ -21,7 +21,7 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public List<ProjectResponseDTO> findAll(@AuthenticationPrincipal User user){
+    public List<ProjectResponseDTO> findAll(@AuthenticationPrincipal(errorOnInvalidType=true) User user){
         final List<Project> projects = projectService.findByUserId(user.getId());
         return projectMapper.toDTOs(projects);
     }

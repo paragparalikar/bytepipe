@@ -1,6 +1,6 @@
 package com.bytepipe.role;
 
-import com.bytepipe.audit.AbstractAuditable;
+import com.bytepipe.common.audit.AbstractAuditable;
 import com.bytepipe.project.Project;
 import com.bytepipe.user.Authority;
 import jakarta.persistence.*;

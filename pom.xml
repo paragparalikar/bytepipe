@@ -15,10 +15,14 @@
     </modules>
 
     <properties>
+        <ehcache.version>3.10.8</ehcache.version>
         <mapstruct.version>1.6.3</mapstruct.version>
+        <springdoc.verion>2.7.0</springdoc.verion>
+        <bucket4j.version>0.12.8</bucket4j.version>
         <spring.boot.version>3.4.0</spring.boot.version>
         <maven.compiler.source>23</maven.compiler.source>
         <maven.compiler.target>23</maven.compiler.target>
+        <hazelcast.version>5.5.0</hazelcast.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven-compiler-plugin.version>3.13.0</maven-compiler-plugin.version>
     </properties>

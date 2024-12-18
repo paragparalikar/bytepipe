@@ -1,6 +1,6 @@
 package com.bytepipe.alert.mail.verification;
 
-import com.bytepipe.audit.AbstractAuditable;
+import com.bytepipe.common.audit.AbstractAuditable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

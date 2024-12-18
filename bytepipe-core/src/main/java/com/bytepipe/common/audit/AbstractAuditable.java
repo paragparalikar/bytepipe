@@ -1,4 +1,4 @@
-package com.bytepipe.audit;
+package com.bytepipe.common.audit;
 
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;

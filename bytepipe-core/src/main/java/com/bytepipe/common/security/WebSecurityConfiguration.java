@@ -9,20 +9,29 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfiguration {
 
     @Bean
+    public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
+    }
+
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http.csrf(configurer -> configurer.csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse()))
                 .authorizeHttpRequests(manager -> manager
                 .requestMatchers(HttpMethod.POST, "/users").permitAll()
                 .anyRequest().authenticated())
             .formLogin(Customizer.withDefaults());
+
         return http.build();
     }
 
@@ -32,8 +41,8 @@ public class WebSecurityConfiguration {
         user.setEnabled(true);
         user.setId(1L);
         user.setEmail("user");
-        user.setPassword("{noop}user");
-        return new InMemoryUserDetailsManager(user);
+        user.setPassword(passwordEncoder().encode("user"));
+        return username -> user;
     }
 
 }

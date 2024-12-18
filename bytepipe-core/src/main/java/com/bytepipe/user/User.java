@@ -1,6 +1,6 @@
 package com.bytepipe.user;
 
-import com.bytepipe.audit.AbstractAuditable;
+import com.bytepipe.common.audit.AbstractAuditable;
 import com.bytepipe.role.Role;
 import jakarta.persistence.*;
 import jakarta.validation.Valid;
@@ -22,6 +22,7 @@ import java.util.stream.Collectors;
 @Table(name = "USER_")
 @EqualsAndHashCode(callSuper = false)
 public class User extends AbstractAuditable implements UserDetails {
+    public static final String PATTERN_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$@!%&*?])[A-Za-z\\d#$@!%&*?]{8,255}$";
 
     @Id
     @GeneratedValue
