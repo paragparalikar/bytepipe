@@ -11,6 +11,6 @@ public class UserResponseDTO {
     private String email;
     private String givenName;
     private String familyName;
-    private Map<String, String> attributes;
+    private Map<String, String> properties;
 
 }

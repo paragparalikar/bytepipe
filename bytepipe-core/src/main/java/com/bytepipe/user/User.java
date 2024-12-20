@@ -12,6 +12,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.oidc.OidcIdToken;
+import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -21,7 +24,8 @@ import java.util.stream.Collectors;
 @Cacheable
 @Table(name = "USER_")
 @EqualsAndHashCode(callSuper = false)
-public class User extends AbstractAuditable implements UserDetails {
+public class User extends AbstractAuditable implements UserDetails, OidcUser {
+    public static final int DEFAULT_PASSWORD_LENGTH = 10;
     public static final String PATTERN_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$@!%&*?])[A-Za-z\\d#$@!%&*?]{8,255}$";
 
     @Id
@@ -36,29 +40,22 @@ public class User extends AbstractAuditable implements UserDetails {
     @Size(min = 8, max = 255)
     private String password;
 
-    @NotBlank
     @Size(max = 255)
-    @Column(nullable = false)
-    private String givenName;
-
-    @NotBlank
-    @Size(max = 255)
-    @Column(nullable = false)
-    private String familyName;
+    private String name;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<@Valid @NotNull Role> roles = new HashSet<>();
 
     private boolean enabled;
 
-    @NotNull
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    private IdentityProvider identityProvider;
-
     @Size(max = 255)
     @ElementCollection
-    private Map<@NotBlank @Size(max = 255) String, @NotBlank @Size(max = 255) String> attributes = new HashMap<>();
+    private Map<@NotBlank @Size(max = 255) String, @NotBlank @Size(max = 255) String> properties = new HashMap<>();
+
+    @Transient private OidcIdToken idToken;
+    @Transient private OidcUserInfo userInfo;
+    @Transient private Map<String, Object> claims;
+    @Transient private Map<String, Object> attributes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

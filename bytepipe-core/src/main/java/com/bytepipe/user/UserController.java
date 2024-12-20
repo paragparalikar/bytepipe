@@ -17,9 +17,8 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public UserResponseDTO register(@RequestBody @NotNull @Valid RegisterUserRequestDTO dto) throws UserExistsException {
+    public UserResponseDTO register(@RequestBody @NotNull @Valid RegisterUserRequestDTO dto) {
         final User user = userMapper.registrationDtoToUser(dto);
-        user.setIdentityProvider(IdentityProvider.SELF);
         final User managedUser = userService.create(user);
         return userMapper.toDTO(managedUser);
     }

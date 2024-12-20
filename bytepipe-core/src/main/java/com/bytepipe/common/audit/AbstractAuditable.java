@@ -17,13 +17,13 @@ import java.time.Instant;
 public abstract class AbstractAuditable {
 
     @CreatedBy
-    private String createdBy;
+    private Long createdBy;
 
     @CreatedDate
     private Instant createdDate;
 
     @LastModifiedBy
-    private String lastModifiedBy;
+    private Long lastModifiedBy;
 
     @LastModifiedDate
     private Instant lastModifiedDate;

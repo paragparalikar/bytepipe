@@ -24,7 +24,7 @@ public class UpdateUserRequestDTO {
     private String familyName;
 
     @Size(max = 255)
-    private Map<@NotBlank @Size(max = 255) String, @NotBlank @Size(max = 255) String> attributes = new HashMap<>();
+    private Map<@NotBlank @Size(max = 255) String, @NotBlank @Size(max = 255) String> properties = new HashMap<>();
 
 
 }

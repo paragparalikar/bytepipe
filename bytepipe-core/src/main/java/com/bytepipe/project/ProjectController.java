@@ -7,7 +7,9 @@ import com.bytepipe.user.User;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,8 +23,10 @@ public class ProjectController {
     private final ProjectService projectService;
 
     @GetMapping
-    public List<ProjectResponseDTO> findAll(@AuthenticationPrincipal(errorOnInvalidType=true) User user){
-        final List<Project> projects = projectService.findByUserId(user.getId());
+    public List<ProjectResponseDTO> findAll(@AuthenticationPrincipal(errorOnInvalidType = true) UserDetails user){
+        System.out.println(user);
+        System.out.println(user.getClass().getCanonicalName());
+        final List<Project> projects = projectService.findByUserId(0L);
         return projectMapper.toDTOs(projects);
     }
 

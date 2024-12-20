@@ -72,7 +72,14 @@
             <version>${mapstruct.version}</version>
         </dependency>
 
-
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-configuration-processor</artifactId>
+        </dependency>
         <!-- TODO remove h2 in favor of mysql -->
         <dependency>
             <groupId>com.h2database</groupId>

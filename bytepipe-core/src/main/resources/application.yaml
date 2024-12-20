@@ -1,4 +1,6 @@
 spring:
+  application:
+    name: bytepipe
   main:
     banner-mode: off
   h2:
@@ -36,6 +38,29 @@ spring:
     jcache:
       config: classpath:ehcache.xml
       provider: org.ehcache.jsr107.EhcacheCachingProvider
+  security:
+    oauth2:
+      client:
+        registration:
+          github:
+            client-id: Ov23lipzYgbVE2NBCI6n
+            client-secret: bf22f6b30ce23f965a896c9b2852bba1992e771a
+          google:
+            client-id: 309470803706-erf2diogu09ah4eapebn6ianedf8gqdr.apps.googleusercontent.com
+            client-secret: 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
+            redirectUri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            authorizationUri: "https://accounts.google.com/o/oauth2/v2/auth"
+            tokenUri: "https://www.googleapis.com/oauth2/v4/token"
+            userInfoUri: "https://www.googleapis.com/oauth2/v3/userinfo"
+            jwkSetUri: "https://www.googleapis.com/oauth2/v3/certs"
+            clientName: "Google"
+            scope:
+              - email
+              - profile
+              - email
+              - address
+              - phone
+
 bucket4j:
   enabled: true
   cache-to-use: jcache
