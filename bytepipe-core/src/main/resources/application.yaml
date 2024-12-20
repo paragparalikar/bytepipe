@@ -48,18 +48,6 @@ spring:
           google:
             client-id: 309470803706-erf2diogu09ah4eapebn6ianedf8gqdr.apps.googleusercontent.com
             client-secret: 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
-            redirectUri: "{baseUrl}/login/oauth2/code/{registrationId}"
-            authorizationUri: "https://accounts.google.com/o/oauth2/v2/auth"
-            tokenUri: "https://www.googleapis.com/oauth2/v4/token"
-            userInfoUri: "https://www.googleapis.com/oauth2/v3/userinfo"
-            jwkSetUri: "https://www.googleapis.com/oauth2/v3/certs"
-            clientName: "Google"
-            scope:
-              - email
-              - profile
-              - email
-              - address
-              - phone
 
 bucket4j:
   enabled: true
