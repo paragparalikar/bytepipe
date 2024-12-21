@@ -14,7 +14,7 @@ spring:
     driverClassName: org.h2.Driver
   jpa:
     properties:
-      javax:
+      jakarta:
         persistence:
           validation:
             mode: none
@@ -93,4 +93,4 @@ bytepipe:
       twitter: https://www.x.com/bytepipe
       linkedin: https://www.linkedin.com/bytepipe
 
-debug: false
+debug: true

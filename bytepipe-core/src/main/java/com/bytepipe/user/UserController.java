@@ -1,5 +1,7 @@
 package com.bytepipe.user;
 
+import com.bytepipe.alert.mail.EmailTemplate;
+import com.bytepipe.alert.mail.verification.EmailVerificationService;
 import com.bytepipe.user.dto.RegisterUserRequestDTO;
 import com.bytepipe.user.dto.UpdateUserRequestDTO;
 import com.bytepipe.user.dto.UserResponseDTO;
@@ -7,6 +9,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
+import org.thymeleaf.context.Context;
 
 @RestController
 @RequiredArgsConstructor
@@ -15,10 +18,18 @@ public class UserController {
 
     private final UserMapper userMapper;
     private final UserService userService;
+    private final EmailVerificationService emailVerificationService;
 
     @PostMapping
     public UserResponseDTO register(@RequestBody @NotNull @Valid RegisterUserRequestDTO dto) {
         final User user = userMapper.registrationDtoToUser(dto);
+        user.setEnabled(false);
+        final Context context = new Context();
+        context.setVariable("user", user);
+        emailVerificationService.initiate(user.getEmail(),
+                "Please verify your email",
+                EmailTemplate.EMAIL_VERIFICATION,
+                context);
         final User managedUser = userService.create(user);
         return userMapper.toDTO(managedUser);
     }
