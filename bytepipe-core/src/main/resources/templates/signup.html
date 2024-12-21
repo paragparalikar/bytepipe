@@ -1,4 +1,7 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full">
 <head>
+    <title>Sign Up</title>
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
@@ -577,7 +580,7 @@
 <body class="h-full text-base-content">
 <div id="signup-page" class="flex h-full">
     <div id="left-section" class="hidden lg:block w-1/2 relative">
-        <img class="absolute inset-0 object-cover w-full h-full" src="../static/signup-bg.png" alt="modern tech office interior with glass walls, computers and creative professionals working, professional photography, warm lighting">
+        <img class="absolute inset-0 object-cover w-full h-full" th:src="@{/images/signup-bg.png}" alt="modern tech office interior with glass walls, computers and creative professionals working, professional photography, warm lighting">
     </div>
     <div id="right-section" class="w-full lg:w-1/2 px-4 py-6 lg:px-8 xl:px-16">
         <div class="max-w-sm mx-auto">
@@ -645,3 +648,4 @@
 
 
 </body>
+</html>

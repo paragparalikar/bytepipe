@@ -47,7 +47,7 @@ public class WebSecurityConfiguration {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(manager -> manager
                         .requestMatchers(HttpMethod.POST, "/users").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/signup", "/error", "/h2/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/signup", "/error", "/h2/**", "/images/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(config -> config.loginPage("/signin").permitAll())
                 .oauth2Login(config -> config.userInfoEndpoint(infoConfig -> infoConfig
