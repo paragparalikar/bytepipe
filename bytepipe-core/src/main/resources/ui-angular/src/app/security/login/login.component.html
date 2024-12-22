@@ -1,31 +1,16 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en">
-<head>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <title>Sign in</title>
-    <style>
-        :root{
-            font-size: 12px;
-        }
-    </style>
-</head>
-<body class="h-screen">
+
 <div class="flex h-screen items-center justify-center">
     <div class="flex h-3xl max-h-3xl max-w-5xl bg-white border border-gray-200 rounded-lg shadow-2xl">
         <div id="login-left" class="hidden lg:block w-1/2">
             <img class="object-cover w-full h-full rounded-l-lg"
-                 src="images/signin-bg.png"
-                 th:src="@{/images/signin-bg.png}"
+                 src="signin-bg.png"
                  alt="modern office workspace with computers and large windows, professional corporate environment, high quality photograph">
         </div>
         <div id="login-right" class="w-full lg:w-1/2 flex items-center justify-center px-6 py-6 lg:px-12">
             <div class="w-full max-w-[400px] space-y-8">
                 <div class="text-center">
                     <h1 class="text-3xl font-bold text-gray-900 mb-2">Sign in to
-                        <span style="color:blue; font-weight:400; ">(</span>
-                        <span style="font-weight:400; font-size: 20px; color:red;">BytePipe</span>
-                        <span style="color:blue; font-weight:400; ">)</span>
+                        <app-logo/>
                     </h1>
                 </div>
                 <form class="space-y-6">
@@ -138,5 +123,3 @@
         </div>
     </div>
 </div>
-</body>
-</html>

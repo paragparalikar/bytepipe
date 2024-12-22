@@ -1,34 +1,13 @@
-<!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" lang="en" class="h-full">
-<head>
-    <title>Sign Up</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js" crossorigin="anonymous"
-            referrerpolicy="no-referrer"></script>
-    <style>
-        :root{
-            font-size: 12px;
-        }
-    </style>
-<body class="h-screen">
 <div class="flex h-screen items-center justify-center">
     <div class="flex h-3xl max-h-3xl max-w-5xl bg-white border border-gray-200 rounded-lg shadow-2xl">
         <div id="left-section" class="hidden lg:block w-1/2 relative">
-            <img class="object-cover w-full h-full rounded-l-lg"
-                 src="images/signup-bg.png"
-                 th:src="@{/images/signup-bg.png}"
+            <img class="object-cover w-full h-full rounded-l-lg" src="signup-bg.png"
                  alt="modern tech office interior with glass walls, computers and creative professionals working, professional photography, warm lighting">
         </div>
         <div id="right-section" class="w-full lg:w-1/2 px-4 py-6 lg:px-8 xl:px-16">
             <div class="max-w-sm mx-auto">
-                <div class="text-sm text-gray-600">
-                    Already a member?
-                    <a href="/signin" class="text-blue-600 hover:text-blue-700 font-medium">Sign in</a>
-                </div>
                 <h1 class="text-2xl font-bold text-gray-900 mb-2">Sign up for
-                    <span style="color:blue; font-weight:400; ">(</span>
-                    <span style="font-weight:400; font-size: 20px; color:red;">BytePipe</span>
-                    <span style="color:blue; font-weight:400; ">)</span>
+                    <app-logo/>
                 </h1>
                 <form id="signup-form" class="space-y-4">
                     <div class="space-y-3 py-4">
@@ -89,10 +68,11 @@
                         <span class="text-blue-600 hover:text-blue-700 cursor-pointer">Privacy Policy</span>
                     </p>
                 </form>
+                <div class="text-sm text-center text-gray-600 pt-6">
+                    Already a member?
+                    <a href="/signin" class="text-blue-600 hover:text-blue-700 font-medium">Sign in</a>
+                </div>
             </div>
         </div>
     </div>
 </div>
-
-</body>
-</html>
