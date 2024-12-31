@@ -1,22 +1,19 @@
 import { Component } from '@angular/core';
 import { LogoComponent } from "../../logo/logo.component";
-import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { faGoogle, faMicrosoft, faLinkedinIn, faApple, faGithub, faGitlab, faTwitter, faFacebook, faAmazon } from '@fortawesome/free-brands-svg-icons';
+import { OidcSecurityService } from 'angular-auth-oidc-client';
 
 @Component({
   selector: 'app-login',
-  imports: [LogoComponent, FontAwesomeModule],
+  imports: [LogoComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-  google = faGoogle;
-  microsoft = faMicrosoft;
-  linkedin = faLinkedinIn;
-  apple = faApple;
-  github = faGithub;
-  gitlab = faGitlab;
-  facebook = faFacebook;
-  twitter = faTwitter;
-  amazon = faAmazon;
+  
+  constructor(private oidcSecurityService: OidcSecurityService){}
+
+  login(configId: string): void {
+    this.oidcSecurityService.authorize(configId);
+  }
+
 }

@@ -54,11 +54,14 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              }
+              },
+              "src/silent-renew.html"
             ],
             "styles": [
-              "src/styles.css",
-              "node_modules/@fortawesome/fontawesome-free/css/all.min.css"
+              "node_modules/@fontsource/quicksand/300.css",
+              "node_modules/@fontsource/quicksand/400.css",
+              "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
+              "src/styles.css"
             ],
             "scripts": [
               "node_modules/@fortawesome/fontawesome-free/js/all.min.js"

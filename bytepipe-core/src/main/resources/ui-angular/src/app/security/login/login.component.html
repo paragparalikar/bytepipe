@@ -2,9 +2,7 @@
 <div class="flex h-screen items-center justify-center">
     <div class="flex h-xl max-h-xl max-w-2xl bg-white border border-gray-200 rounded-lg shadow-2xl">
         <div id="login-left" class="hidden lg:block w-1/2">
-            <img class="object-cover w-full h-full rounded-l-lg"
-                 src="signin-bg.png"
-                 alt="modern office workspace with computers and large windows, professional corporate environment, high quality photograph">
+            <img class="object-cover w-full h-full rounded-l-lg" src="signin-bg.png" alt="Bytepipe">
         </div>
         <div id="login-right" class="w-full lg:w-1/2 flex items-center justify-center px-6 py-6 lg:px-12">
             <div class="w-full max-w-[400px] space-y-8">
@@ -19,33 +17,18 @@
                         <span class="px-2 bg-white text-gray-500">Login to BytePipe using</span>
                     </div>
                 </div>
-                <div class="grid grid-cols-3 gap-5">
-                    <a href="/oauth2/authorization/google">
+                <div class="grid grid-cols-4 gap-5">
+                    <a (click)="login('google')" class="cursor-pointer">
                        <img src="logo-google.png" class="w-12 h-12 rounded" />
                     </a>
-                    <a href="/oauth2/authorization/microsoft">
+                    <a (click)="login('microsoft')" class="cursor-pointer">
                         <img src="logo-microsoft.png" class="w-12 h-12 rounded" />
                     </a>
-                    <a href="/oauth2/authorization/linkedin">
+                    <a (click)="login('linkedin')" class="cursor-pointer">
                         <img src="logo-linkedin.png" class="w-12 h-12 rounded" />
                     </a>
-                    <a href="/oauth2/authorization/github">
+                    <a (click)="login('github')" class="cursor-pointer">
                         <img src="logo-github.png" class="w-12 h-12 rounded" />
-                    </a>
-                    <a href="/oauth2/authorization/gitlab">
-                        <img src="logo-gitlab.png" class="w-12 h-12 rounded" />
-                    </a>
-                    <a href="/oauth2/authorization/amazon">
-                        <img src="logo-amazon.png" class="w-12 h-12 rounded" />
-                    </a>
-                    <a href="/oauth2/authorization/apple">
-                        <img src="logo-apple.png" class="w-12 h-12 rounded" />
-                    </a>
-                    <a href="/oauth2/authorization/facebook">
-                        <img src="logo-facebook.png" class="w-12 h-12 rounded" />
-                    </a>
-                    <a href="/oauth2/authorization/twitter">
-                        <img src="logo-twitter.png" class="w-12 h-12 rounded" />
                     </a>
                 </div>
             </div>
