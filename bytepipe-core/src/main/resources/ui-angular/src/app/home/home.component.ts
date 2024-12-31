@@ -3,6 +3,7 @@ import { Router, RouterOutlet } from '@angular/router';
 import { SidebarComponent } from '../sidebar/sidebar.component';
 import { NavbarComponent } from '../navbar/navbar.component';
 import { LoginResponse, OidcSecurityService } from 'angular-auth-oidc-client';
+import { UserService } from '../security/user.service';
 
 @Component({
   selector: 'app-home',
@@ -14,6 +15,7 @@ export class HomeComponent implements OnInit {
 
   constructor (
     private router: Router,
+    private userService: UserService,
     private securityService: OidcSecurityService) { }
   
   ngOnInit(): void {
@@ -23,6 +25,10 @@ export class HomeComponent implements OnInit {
       if(loggedInResponse){
         console.log('configId ' + loggedInResponse.configId);
         console.log("User Data : " + JSON.stringify(loggedInResponse.userData));
+        localStorage.setItem('oauth2-config-id', loggedInResponse.configId ?? "");
+        this.userService.create(loggedInResponse.userData).subscribe(response => {
+          console.log(JSON.stringify(response));
+        });
       } else {
         this.router.navigateByUrl('/signin');
       }

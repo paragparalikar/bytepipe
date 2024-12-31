@@ -5,6 +5,7 @@ import com.bytepipe.alert.mail.verification.EmailVerificationService;
 import com.bytepipe.user.dto.RegisterUserRequestDTO;
 import com.bytepipe.user.dto.UpdateUserRequestDTO;
 import com.bytepipe.user.dto.UserResponseDTO;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +22,14 @@ public class UserController {
     private final EmailVerificationService emailVerificationService;
 
     @PostMapping
+    public void test(HttpServletRequest request){
+        request.getHeaderNames().asIterator().forEachRemaining(headerName -> {
+            System.out.println(headerName + " : " +request.getHeader(headerName));
+        });
+    }
+
+
+    //@PostMapping
     public UserResponseDTO register(@RequestBody @NotNull @Valid RegisterUserRequestDTO dto) {
         final User user = userMapper.registrationDtoToUser(dto);
         user.setEnabled(false);

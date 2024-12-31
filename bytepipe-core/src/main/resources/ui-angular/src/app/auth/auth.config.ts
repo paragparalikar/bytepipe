@@ -19,7 +19,7 @@ export const authConfig: PassedInitialConfig = {
             triggerAuthorizationResultEvent: true,
             checkRedirectUrlWhenCheckingIfIsCallback: false,
             renewTimeBeforeTokenExpiresInSeconds: 10,
-            secureRoutes: ['http://localhost:8080/']
+            secureRoutes: ['http://localhost:8080']
           },
           {
             configId: 'microsoft',
@@ -38,7 +38,7 @@ export const authConfig: PassedInitialConfig = {
             checkRedirectUrlWhenCheckingIfIsCallback: false,
             silentRenewUrl: window.location.origin + '/silent-renew.html',
             renewTimeBeforeTokenExpiresInSeconds: 10,
-            secureRoutes: ['http://localhost:8080/']
+            secureRoutes: ['http://localhost:8080']
           },
           {
             configId: 'linkedin',
@@ -57,7 +57,7 @@ export const authConfig: PassedInitialConfig = {
             checkRedirectUrlWhenCheckingIfIsCallback: false,
             silentRenewUrl: window.location.origin + '/silent-renew.html',
             renewTimeBeforeTokenExpiresInSeconds: 10,
-            secureRoutes: ['http://localhost:8080/']
+            secureRoutes: ['http://localhost:8080']
           },
           {
             configId: 'github',
