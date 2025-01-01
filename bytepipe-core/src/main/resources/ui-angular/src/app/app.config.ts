@@ -9,7 +9,7 @@ import { AbstractSecurityStorage, DefaultLocalStorageService, provideAuth, authI
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }), 
-    provideHttpClient(withInterceptors([tenantHeaderInterceptor, authInterceptor()])),
+    provideHttpClient(withInterceptors([authInterceptor(), tenantHeaderInterceptor])),
     provideRouter(routes), 
     provideAuth(authConfig),
     {
