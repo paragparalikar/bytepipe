@@ -1,7 +1,12 @@
 package com.bytepipe.common.security.authentication;
 
+import com.bytepipe.user.User;
+import com.bytepipe.user.UserService;
 import jakarta.annotation.PostConstruct;
+import lombok.Data;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.http.client.support.BasicAuthenticationInterceptor;
@@ -9,26 +14,23 @@ import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.security.oauth2.core.OAuth2TokenIntrospectionClaimNames;
 import org.springframework.security.oauth2.server.resource.introspection.OAuth2IntrospectionException;
 import org.springframework.security.oauth2.server.resource.introspection.OpaqueTokenIntrospector;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.time.Instant;
 import java.util.*;
-import java.util.function.Function;
 
+@Slf4j
 @Setter
-public class CustomOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
+public class AbstractOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
     private static final ParameterizedTypeReference<Map<String, Object>> STRING_OBJECT_MAP = new ParameterizedTypeReference<>() {
     };
 
     private String clientId;
     private String clientSecret;
-    private String introspectionUri;
-    private RestTemplate restOperations = new RestTemplate();
-    private Function<Map<String, Object>, OAuth2AuthenticatedPrincipal> userResolver;
+    private String userInfoUri;
+    private UserService userService;
+    private final RestTemplate restOperations = new RestTemplate();
 
     @PostConstruct
     public void init(){
@@ -37,7 +39,6 @@ public class CustomOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
 
     @Override
     public OAuth2AuthenticatedPrincipal introspect(String token) {
-        if(!StringUtils.hasText(token)) throw new OAuth2IntrospectionException("Opaque token can not be null or empty");
         try{
             final RequestEntity<?> requestEntity = convert(token);
             final ResponseEntity<Map<String, Object>> responseEntity = restOperations.exchange(requestEntity, STRING_OBJECT_MAP);
@@ -46,33 +47,35 @@ public class CustomOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
             final Map<String, Object> claims = Optional.ofNullable(responseEntity.getBody())
                     .map(this::convertClaimsSet)
                     .orElse(Map.of());
-            return userResolver.apply(claims);
+            return convertAndPersist(claims);
         } catch(Exception e){
-            System.out.println(e.getMessage());
-            e.printStackTrace();
+            log.error("Error while introspecting opaque token", e);
             throw new OAuth2IntrospectionException(e.getMessage(), e);
         }
     }
 
-    private RequestEntity<?> convert(String token){
-        HttpHeaders headers = new HttpHeaders();
+    protected RequestEntity<?> convert(String token){
+        final HttpHeaders headers = new HttpHeaders();
         headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-        MultiValueMap<String, String> body = new LinkedMultiValueMap<>();
-        // Original
-        body.add("token", token);
-
-        // Google
-        body.add("access_token", token);
-
-        // Mircrosoft
-        body.add("code", token);
-        body.add("client_id", clientId);
-        body.add("client_secret", clientSecret);
-        body.add("grant_type", "authorization_code");
-        return new RequestEntity<>(body, headers, HttpMethod.POST, URI.create(introspectionUri));
+        headers.setBearerAuth(token);
+        return new RequestEntity<>(headers, HttpMethod.GET, URI.create(userInfoUri));
     }
 
-    private Map<String, Object> convertClaimsSet(Map<String, Object> claims) {
+    protected OAuth2AuthenticatedPrincipal convertAndPersist(Map<String, Object> claims){
+        claims.forEach((key, value) -> System.out.println(key + " : " + value));
+        final String email = String.valueOf(claims.get("email"));
+        final User user = Optional.ofNullable(userService.findByEmail(email)).orElseGet(User::new);
+        user.setEmail(email);
+        user.setName(String.valueOf(claims.get("name")));
+        final Map<String, Object> attributes = Optional.ofNullable(user.getAttributes()).orElseGet(HashMap::new);
+        attributes.putAll(claims);
+        user.setAttributes(attributes);
+        userService.saveOrUpdate(user);
+        return user;
+    }
+
+
+    protected Map<String, Object> convertClaimsSet(Map<String, Object> claims) {
         claims = new LinkedHashMap<>(claims);
         claims.computeIfPresent(OAuth2TokenIntrospectionClaimNames.AUD, (k, v) -> {
             if (v instanceof String) {
@@ -92,5 +95,4 @@ public class CustomOpaqueTokenIntrospector implements OpaqueTokenIntrospector {
                 (k, v) -> (v instanceof String s) ? Arrays.asList(s.split(" ")) : v);
         return claims;
     }
-
 }

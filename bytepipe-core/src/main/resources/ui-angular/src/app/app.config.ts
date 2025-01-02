@@ -1,18 +1,23 @@
 import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient, withInterceptors } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { routes } from './app.routes';
 import { authConfig } from './auth/auth.config';
-import { tenantHeaderInterceptor } from './security/tenant.interceptor';
-import { AbstractSecurityStorage, DefaultLocalStorageService, provideAuth, authInterceptor } from 'angular-auth-oidc-client';
+import { AuthInterceptor } from './auth/auth-interceptor';
+import { AbstractSecurityStorage, DefaultLocalStorageService, OidcSecurityService, provideAuth } from 'angular-auth-oidc-client';
 
 export const appConfig: ApplicationConfig = {
   providers: [
-    provideZoneChangeDetection({ eventCoalescing: true }), 
-    provideHttpClient(withInterceptors([authInterceptor(), tenantHeaderInterceptor])),
-    provideRouter(routes), 
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    provideHttpClient(withInterceptorsFromDi()),
+    provideRouter(routes),
     provideAuth(authConfig),
     {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptor,
+      multi: true,
+      deps: [OidcSecurityService]
+    }, {
       provide: AbstractSecurityStorage,
       useClass: DefaultLocalStorageService,
     },]

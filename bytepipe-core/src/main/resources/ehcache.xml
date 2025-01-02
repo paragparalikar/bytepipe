@@ -10,5 +10,11 @@
         <heap unit="entries">1000000</heap>
         <jsr107:mbeans enable-statistics="true"/>
     </cache>
+    <cache alias="cache-token-user">
+        <expiry>
+            <ttl unit="minutes">30</ttl>
+        </expiry>
+        <heap unit="entries">1000000</heap>
+    </cache>
 
 </config>

@@ -43,21 +43,19 @@ spring:
       client:
         registration:
           google:
+            user-info-uri: https://openidconnect.googleapis.com/v1/userinfo
             introspection-uri: https://www.googleapis.com/oauth2/v1/tokeninfo
             client-id: 309470803706-erf2diogu09ah4eapebn6ianedf8gqdr.apps.googleusercontent.com
             client-secret: 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
           microsoft:
-            client-id: Ov23lipzYgbVE2NBCI6n
-            client-secret: bf22f6b30ce23f965a896c9b2852bba1992e771a
-            introspection-uri: https://oauth2.googleapis.com/token
+            client-id: eedda50f-e99c-4311-856e-d5433a40a01c
+            client-secret: ony8Q~otEq0JkyvAG3Omqkp7i9Mq3aAP.foZedvw
+            user-info-uri: https://login.microsoftonline.com/5d6c98ab-f906-4b12-9d24-ee1c69f44321/openid/userinfo
           linkedin:
             client-id: Ov23lipzYgbVE2NBCI6n
             client-secret: bf22f6b30ce23f965a896c9b2852bba1992e771a
             introspection-uri: https://oauth2.googleapis.com/token
-          github:
-            client-id: Ov23lipzYgbVE2NBCI6n
-            client-secret: bf22f6b30ce23f965a896c9b2852bba1992e771a
-            introspection-uri: https://oauth2.googleapis.com/token
+            user-info-uri: https://api.linkedin.com/v2/userinfo
 
 bucket4j:
   enabled: true

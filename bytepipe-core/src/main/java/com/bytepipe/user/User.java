@@ -11,12 +11,12 @@ import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.oauth2.core.oidc.OidcIdToken;
-import org.springframework.security.oauth2.core.oidc.OidcUserInfo;
-import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Data
@@ -24,38 +24,24 @@ import java.util.stream.Collectors;
 @Cacheable
 @Table(name = "USER_")
 @EqualsAndHashCode(callSuper = false)
-public class User extends AbstractAuditable implements UserDetails, OidcUser {
-    public static final int DEFAULT_PASSWORD_LENGTH = 10;
-    public static final String PATTERN_PASSWORD = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[#$@!%&*?])[A-Za-z\\d#$@!%&*?]{8,255}$";
+public class User extends AbstractAuditable implements OAuth2AuthenticatedPrincipal {
 
     @Id
     @GeneratedValue
     private Long id;
+
+    @Size(max = 255)
+    private String name;
 
     @Email
     @NotBlank
     @Column(unique = true, nullable = false)
     private String email;
 
-    @Size(min = 8, max = 255)
-    private String password;
-
-    @Size(max = 255)
-    private String name;
+    @Transient private Map<String, Object> attributes;
 
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<@Valid @NotNull Role> roles = new HashSet<>();
-
-    private boolean enabled;
-
-    @Size(max = 255)
-    @ElementCollection
-    private Map<@NotBlank @Size(max = 255) String, @NotBlank @Size(max = 255) String> properties = new HashMap<>();
-
-    @Transient private OidcIdToken idToken;
-    @Transient private OidcUserInfo userInfo;
-    @Transient private Map<String, Object> claims;
-    @Transient private Map<String, Object> attributes;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -63,11 +49,6 @@ public class User extends AbstractAuditable implements UserDetails, OidcUser {
                 .map(Role::getAuthorities)
                 .flatMap(Collection::stream)
                 .collect(Collectors.toSet());
-    }
-
-    @Override
-    public String getUsername() {
-        return email;
     }
 
 }
