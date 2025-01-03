@@ -33,6 +33,15 @@ public class User extends AbstractAuditable implements OAuth2AuthenticatedPrinci
     @Size(max = 255)
     private String name;
 
+    @Size(max = 255)
+    private String givenName;
+
+    @Size(max = 255)
+    private String familyName;
+
+    @Size(max = 255)
+    private String picture;
+
     @Email
     @NotBlank
     @Column(unique = true, nullable = false)
