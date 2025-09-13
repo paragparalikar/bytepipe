@@ -6,9 +6,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.oauth2.server.resource.authentication.JwtIssuerAuthenticationManagerResolver;
 import org.springframework.security.web.SecurityFilterChain;
@@ -38,13 +38,15 @@ public class WebSecurityConfiguration {
                 trustedIssuers::contains, jwtAuthenticationConverter);
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(config -> config.configurationSource(corsConfigurationSource()))
-                .authorizeHttpRequests(manager -> manager
-                        .requestMatchers("/h2/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/favicon.ico", "/**/*.html", "/**/*.jpg", "/**/*.png", "/**/*.js", "/**/*.css", "**/*.ttf", "/**/*.woff2").permitAll()
-                        .anyRequest().authenticated())
+                .authorizeHttpRequests(manager -> manager.anyRequest().authenticated())
                 .oauth2ResourceServer(config -> config.authenticationManagerResolver(
                         new JwtIssuerAuthenticationManagerResolver(authenticationManagerResolver)))
                 .build();
+    }
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer(){
+        return web -> web.ignoring().requestMatchers("/h2/**", "/favicon.ico", "/**.html", "/**.jpg", "/**.png", "/**.js", "/**.css", "/**.ttf", "/**.woff2");
     }
 
     @Bean
