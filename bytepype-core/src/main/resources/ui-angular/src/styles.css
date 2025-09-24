@@ -1,0 +1,13 @@
+
+@import "../node_modules/bootstrap/dist/css/bootstrap.min.css"; 
+
+@tailwind base;
+
+@tailwind components;
+
+@tailwind utilities;
+
+:root{
+    font-size: 16px;
+    font-family: "Quicksand"; 
+}
