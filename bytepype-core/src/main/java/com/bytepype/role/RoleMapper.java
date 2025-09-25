@@ -22,7 +22,6 @@ public abstract class RoleMapper {
     public abstract RoleResponseDTO toDTO(Role role);
 
     @Mapping(target="id", ignore = true)
-    @Mapping(target="project", ignore = true)
     @Mapping(target="createdBy", ignore = true)
     @Mapping(target="createdDate", ignore = true)
     @Mapping(target="lastModifiedBy", ignore = true)
