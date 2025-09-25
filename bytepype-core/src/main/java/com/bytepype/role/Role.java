@@ -1,7 +1,6 @@
 package com.bytepype.role;
 
 import com.bytepype.common.audit.AbstractAuditable;
-import com.bytepype.project.Project;
 import com.bytepype.user.Authority;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
@@ -32,8 +31,5 @@ public class Role extends AbstractAuditable {
 
     @ElementCollection(targetClass = Authority.class)
     private Set<Authority> authorities;
-
-    @ManyToOne(optional = false)
-    private Project project;
 
 }

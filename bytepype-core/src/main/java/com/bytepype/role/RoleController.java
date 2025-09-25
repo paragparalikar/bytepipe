@@ -19,9 +19,8 @@ public class RoleController {
     private final RoleService roleService;
 
     @GetMapping(params = {"name", "projectId"})
-    public void existsByNameAndProjectId(@RequestParam @NotBlank @Size(max = 255) String name,
-                                         @RequestParam @NotNull Long projectId) throws RoleNotFoundException {
-        if(!roleService.existsByNameIgnoreCaseAndProjectId(name, projectId)){
+    public void existsByNameAndProjectId(@RequestParam @NotBlank @Size(max = 255) String name) throws RoleNotFoundException {
+        if(!roleService.existsByNameIgnoreCase(name)){
             throw new RoleNotFoundException(0L);
         }
     }

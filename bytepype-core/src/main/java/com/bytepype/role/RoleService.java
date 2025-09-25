@@ -24,7 +24,7 @@ public class RoleService {
         roleRepository.deleteById(id);
     }
 
-    public boolean existsByNameIgnoreCaseAndProjectId(String name, Long projectId){
-        return roleRepository.existsByNameIgnoreCaseAndProjectId(name, projectId);
+    public boolean existsByNameIgnoreCase(String name){
+        return roleRepository.existsByNameIgnoreCase(name);
     }
 }
