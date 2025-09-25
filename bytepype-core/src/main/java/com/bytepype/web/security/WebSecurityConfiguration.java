@@ -1,4 +1,4 @@
-package com.bytepype.common.security;
+package com.bytepype.web.security;
 
 import com.bytepype.user.UserService;
 import lombok.RequiredArgsConstructor;

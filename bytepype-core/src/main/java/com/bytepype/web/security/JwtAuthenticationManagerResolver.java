@@ -1,4 +1,4 @@
-package com.bytepype.common.security;
+package com.bytepype.web.security;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

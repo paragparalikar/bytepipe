@@ -1,4 +1,4 @@
-package com.bytepype.common.security;
+package com.bytepype.web.security;
 
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
