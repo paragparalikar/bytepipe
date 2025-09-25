@@ -1,7 +1,9 @@
 package com.bytepype.source;
 
 import com.bytepype.common.audit.AbstractAuditable;
+import com.bytepype.connection.Connection;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
@@ -27,6 +29,8 @@ public class Source extends AbstractAuditable {
     @Size(max = 255)
     private String description;
 
-    private boolean enabled;
+    @Valid
+    @ManyToOne
+    private Connection<?> connection;
 
 }

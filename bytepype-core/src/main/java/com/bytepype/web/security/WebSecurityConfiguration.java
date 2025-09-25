@@ -39,6 +39,7 @@ public class WebSecurityConfiguration {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(config -> config.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(manager -> manager.anyRequest().authenticated())
+                .oauth2Login(oauth2 -> oauth2.redirectionEndpoint(config -> config.baseUri("/oidc/redirect")))
                 .oauth2ResourceServer(config -> config.authenticationManagerResolver(
                         new JwtIssuerAuthenticationManagerResolver(authenticationManagerResolver)))
                 .build();
@@ -46,7 +47,9 @@ public class WebSecurityConfiguration {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
-        return web -> web.ignoring().requestMatchers("/h2/**", "/favicon.ico", "/**.html", "/**.jpg", "/**.png", "/**.js", "/**.css", "/**.ttf", "/**.woff2");
+        return web -> web.ignoring().requestMatchers(
+                "/h2/**", "/favicon.ico",
+                "/index.html", "silent-renew.html", "/**.jpg", "/**.png", "/**.js", "/**.css", "/**.ttf", "/**.woff2");
     }
 
     @Bean

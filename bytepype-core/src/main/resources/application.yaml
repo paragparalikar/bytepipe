@@ -39,6 +39,16 @@ spring:
       config: classpath:ehcache.xml
       provider: org.ehcache.jsr107.EhcacheCachingProvider
   security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 309470803706-erf2diogu09ah4eapebn6ianedf8gqdr.apps.googleusercontent.com
+            client-secret: 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
+            authorization-grant-type: authorization_code
+            redirect-uri: '{baseUrl}/oidc/redirect'
+            scope: openid
+            client-name: BytepipeOauth2Client1
     trusted-issuers: >
       https://accounts.google.com,
       https://sts.windows.net/5d6c98ab-f906-4b12-9d24-ee1c69f44321/
@@ -91,5 +101,5 @@ logging:
   level:
     org:
       springframework:
-        security: TRACE
-logging.level.org.springframework.security.web.access.ExceptionTranslationFilter: TRACE
+        security: WARN
+logging.level.org.springframework.security.web.access.ExceptionTranslationFilter: WARN

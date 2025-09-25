@@ -3,7 +3,6 @@ package com.bytepype.role;
 import com.bytepype.role.dto.CreateRoleRequestDTO;
 import com.bytepype.role.dto.RoleResponseDTO;
 import com.bytepype.role.dto.UpdateRoleRequestDTO;
-import org.mapstruct.InheritConfiguration;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingTarget;
@@ -28,7 +27,11 @@ public abstract class RoleMapper {
     @Mapping(target="lastModifiedDate", ignore = true)
     public abstract Role toEntity(CreateRoleRequestDTO dto);
 
-    @InheritConfiguration
+    @Mapping(target="id", ignore = true)
+    @Mapping(target="createdBy", ignore = true)
+    @Mapping(target="createdDate", ignore = true)
+    @Mapping(target="lastModifiedBy", ignore = true)
+    @Mapping(target="lastModifiedDate", ignore = true)
     public abstract void update(@MappingTarget Role role, UpdateRoleRequestDTO dto);
 
     public abstract List<RoleResponseDTO> toDTOs(List<Role> roles);
