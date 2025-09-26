@@ -13,20 +13,20 @@ import java.util.List;
 public interface SourceMapper {
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "enabled", ignore = true)
+    @Mapping(target = "connection", ignore = true)
     @Mapping(target="createdBy", ignore = true)
     @Mapping(target="createdDate", ignore = true)
     @Mapping(target="lastModifiedBy", ignore = true)
     @Mapping(target="lastModifiedDate", ignore = true)
     Source toSource(CreateSourceRequestDTO requestDTO);
 
+    @Mapping(target = "connection", ignore = true)
     @Mapping(target="createdBy", ignore = true)
     @Mapping(target="createdDate", ignore = true)
     @Mapping(target="lastModifiedBy", ignore = true)
     @Mapping(target="lastModifiedDate", ignore = true)
     @Mapping(target = "id", source = "id")
     @Mapping(target = "name", source = "dto.name")
-    @Mapping(target = "enabled", source = "dto.enabled")
     @Mapping(target = "description", source = "dto.description")
     Source toSource(Long id, UpdateSourceRequestDTO dto);
 
