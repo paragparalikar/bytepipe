@@ -1,5 +1,6 @@
 package com.bytepype.role;
 
+import com.bytepype.role.exception.RoleNotFoundException;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
