@@ -1,7 +1,9 @@
-package com.bytepype.connection;
+package com.bytepype.pipeline;
 
 import com.bytepype.common.audit.AbstractAuditable;
+import com.bytepype.connection.Connection;
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -10,20 +12,13 @@ import lombok.EqualsAndHashCode;
 import lombok.ToString;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-import java.util.function.Supplier;
-
-import static jakarta.persistence.InheritanceType.JOINED;
-
 @Data
 @Entity
 @Cacheable
-@DiscriminatorValue("")
 @ToString(callSuper = true)
-@Inheritance(strategy = JOINED)
 @EqualsAndHashCode(callSuper = true)
 @EntityListeners(AuditingEntityListener.class)
-@DiscriminatorColumn(name = "TYPE", length = 255)
-public abstract class Connection<T> extends AbstractAuditable implements Supplier<T> {
+public class Pipeline extends AbstractAuditable {
 
     @Id
     @GeneratedValue
@@ -34,12 +29,20 @@ public abstract class Connection<T> extends AbstractAuditable implements Supplie
     @Column(nullable = false)
     private String name;
 
+    private boolean enabled;
+
     @Size(max = 255)
     private String description;
 
+    @Valid
     @NotNull
-    @Enumerated(EnumType.STRING)
-    @Column(insertable=false, updatable=false)
-    private ConnectionType type;
+    @ManyToOne
+    private Connection<?> source;
+
+    @Valid
+    @NotNull
+    @ManyToOne
+    private Connection<?> destination;
+
 
 }

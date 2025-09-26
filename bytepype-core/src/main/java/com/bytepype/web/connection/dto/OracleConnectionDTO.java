@@ -7,7 +7,7 @@ import lombok.ToString;
 @Data
 @ToString(callSuper = true)
 @EqualsAndHashCode(callSuper = true)
-public class OracleConnectionDetailsDTO extends ConnectionDetailsDTO{
+public final class OracleConnectionDTO extends ConnectionDTO {
 
     private String url;
     private String username;
