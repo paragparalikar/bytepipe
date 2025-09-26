@@ -3,7 +3,6 @@ package com.bytepype.web.connection;
 import com.bytepype.connection.Connection;
 import com.bytepype.connection.ConnectionService;
 import com.bytepype.web.connection.dto.ConnectionDTO;
-import com.bytepype.web.connection.dto.ConnectionDetailsDTO;
 import com.bytepype.web.connection.dto.CreateConnectionRequestDTO;
 import com.bytepype.web.connection.dto.UpdateConnectionRequestDTO;
 import jakarta.validation.Valid;
@@ -29,9 +28,9 @@ public class ConnectionController {
     }
 
     @GetMapping("/{id}")
-    public ConnectionDetailsDTO findById(@PathVariable("id") @NotNull final Long id){
+    public ConnectionDTO findById(@PathVariable("id") @NotNull final Long id){
         final Connection<?> connection = connectionService.findById(id);
-        return connectionMapper.toConnectionDetailsDTO(connection);
+        return connectionMapper.toConnectionDTO(connection);
     }
 
     @PostMapping

@@ -14,12 +14,10 @@ import static org.mapstruct.SubclassExhaustiveStrategy.RUNTIME_EXCEPTION;
 @Mapper(componentModel = "spring", subclassExhaustiveStrategy = RUNTIME_EXCEPTION)
 public interface ConnectionMapper {
 
+    @SubclassMapping(target = OracleConnectionDTO.class, source = OracleConnection.class)
     ConnectionDTO toConnectionDTO(Connection<?> connection);
 
-    @SubclassMapping(target = OracleConnectionDetailsDTO.class, source = OracleConnection.class)
-    ConnectionDetailsDTO toConnectionDetailsDTO(Connection<?> connection);
-
-    OracleConnectionDetailsDTO toOracleConnectionDetailsDTO(OracleConnection oracleConnection);
+    OracleConnectionDTO toOracleConnectionDTO(OracleConnection oracleConnection);
 
     @SubclassMapping(target = OracleConnection.class, source = CreateOracleConnectionRequestDTO.class)
     Connection<?> toConnection(CreateConnectionRequestDTO dto);
@@ -46,10 +44,5 @@ public interface ConnectionMapper {
     @Mapping(target="lastModifiedDate", ignore = true)
     OracleConnection toOracleConnection(UpdateOracleConnectionRequestDTO dto);
 
-    CreateConnectionResponseDTO toCreateConnectionResponseDTO(Connection<?> connection);
-
-    UpdateConnectionResponseDTO toUpdateConnectionResponseDTO(Connection<?> connection);
-
-    List<ConnectionDTO> toConnectionDTOs(List<Connection<?>> connections);
-
+    List<ConnectionDTO> toConnectionDTOs(List<Connection<?>> all);
 }
