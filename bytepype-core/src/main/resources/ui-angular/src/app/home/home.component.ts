@@ -19,13 +19,10 @@ export class HomeComponent implements OnInit {
     private securityService: OidcSecurityService) { }
   
   ngOnInit(): void {
-    console.log('logging test');
     this.securityService.checkAuthMultiple(window.location.toString())
     .subscribe((loginResponse: LoginResponse[]) => {
       let loggedInResponse = loginResponse.find(response => response.isAuthenticated);
       if(loggedInResponse){
-        console.log('configId ' + loggedInResponse.configId);
-        console.log("User Data : " + JSON.stringify(loggedInResponse.userData));
         localStorage.setItem('active-provider', loggedInResponse.configId ?? "");
         this.userService.create(loggedInResponse.userData).subscribe(response => {
           console.log(JSON.stringify(response));
