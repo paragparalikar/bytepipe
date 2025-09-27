@@ -1,9 +1,7 @@
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 :root{
-    font-size: 16px;
+    font-size: 14px;
     font-family: "Quicksand"; 
 }
