@@ -1,0 +1,7 @@
+<div class="grid justify-end text-red-500 h-1 p-0.5">
+    <div *ngIf="control && control.errors && (control?.dirty || control?.touched)" class="-mt-2"> 
+        <small *ngIf="control!.errors!['required']">{{name}} is required</small>
+        <small *ngIf="control!.errors!['minlength']">{{name}} is too short</small>
+        <small *ngIf="control!.errors!['maxlength']">{{name}} is too long</small>
+    </div>
+</div>
