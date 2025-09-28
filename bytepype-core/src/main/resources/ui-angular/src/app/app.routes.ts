@@ -3,6 +3,7 @@ import { LoginComponent } from './security/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
 import { ConnectorComponent } from './connector/connector.component';
+import { OracleConnectorEditorComponent } from './connector/oracle/editor/oracle-connector-editor.component';
 
 export const routes: Routes = [
     {
@@ -11,6 +12,7 @@ export const routes: Routes = [
         children: [
             {path: 'dashboard', component: DashboardComponent},
             {path: 'connectors', component: ConnectorComponent},
+            {path: 'connectors/oracle/:id', component: OracleConnectorEditorComponent},
             {path: 'transformers', component: DashboardComponent},
             {path: 'data-flows', component: DashboardComponent},
             {path: 'reports', component: DashboardComponent},
