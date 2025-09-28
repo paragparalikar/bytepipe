@@ -18,7 +18,7 @@ public sealed class ConnectorDTO permits OracleConnectorDTO {
     private String description;
     private ConnectorType type;
     private String createdBy;
-    private Instant createdDate;
+    private String createdDate;
     private String lastModifiedBy;
-    private Instant lastModifiedDate;
+    private String lastModifiedDate;
 }

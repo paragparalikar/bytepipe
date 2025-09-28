@@ -27,8 +27,7 @@ import java.util.stream.Collectors;
 public class User extends AbstractAuditable implements OAuth2AuthenticatedPrincipal {
 
     @Id
-    @GeneratedValue
-    private Long id;
+    private String id;
 
     @Size(max = 255)
     private String name;

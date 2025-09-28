@@ -18,9 +18,12 @@ public abstract class ConnectorMapper {
 
     @Autowired private ConnectorService connectorService;
 
+    @Mapping(target = "createdDate", expression = "java(com.bytepype.common.util.Dates.toString(connector.getCreatedDate()))")
+    @Mapping(target = "lastModifiedDate", expression = "java(com.bytepype.common.util.Dates.toString(connector.getLastModifiedDate()))")
     @SubclassMapping(target = OracleConnectorDTO.class, source = OracleConnector.class)
     public abstract ConnectorDTO toConnectorDTO(Connector<?> connector);
 
+    @Mapping(target = "type", constant = "ORACLE")
     public abstract OracleConnectorDTO toOracleConnectorDTO(OracleConnector oracleConnection);
 
     @SubclassMapping(target = OracleConnector.class, source = CreateOracleConnectorRequestDTO.class)

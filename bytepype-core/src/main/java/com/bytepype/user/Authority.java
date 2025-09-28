@@ -11,4 +11,5 @@ public enum Authority implements GrantedAuthority {
     ;
 
     private final String authority;
+
 }

@@ -28,6 +28,7 @@ public class UserJwtAuthenticationConverter implements Converter<Jwt, UserAuthen
     }
 
     private User updateUser(User user, Jwt jwt){
+        setIfPresent(jwt.getClaimAsString("sub"), user::setId);
         setIfPresent(jwt.getClaimAsString("name"), user::setName);
         setIfPresent(jwt.getClaimAsString("picture"), user::setPicture);
         setIfPresent(jwt.getClaimAsString("given_name"), user::setGivenName);
@@ -44,6 +45,7 @@ public class UserJwtAuthenticationConverter implements Converter<Jwt, UserAuthen
 
     private User createUser(Jwt jwt){
         final User user = new User();
+        user.setId(jwt.getClaimAsString("sub"));
         user.setName(jwt.getClaimAsString("name"));
         user.setEmail(jwt.getClaimAsString("email"));
         user.setPicture(jwt.getClaimAsString("picture"));
