@@ -1,9 +1,11 @@
 import { Component, Input, numberAttribute } from '@angular/core';
 import {FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ErrorComponent } from '../../../common/form-error/form-error.component';
+
 
 @Component({
   selector: 'app-oracle-connector-editor',
-  imports: [ReactiveFormsModule],
+  imports: [ErrorComponent, ReactiveFormsModule],
   templateUrl: './oracle-connector-editor.component.html',
   styleUrl: './oracle-connector-editor.component.css'
 })
