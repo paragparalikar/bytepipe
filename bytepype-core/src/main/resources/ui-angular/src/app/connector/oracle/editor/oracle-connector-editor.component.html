@@ -44,13 +44,20 @@
                     </div>
                 </div>
                 <hr class="hruler">
-                <div class="py-4 flex justify-end">
-                    <button class="btn btn-gray mr-4" (click)="onClose()">
+                <div class="py-4 flex justify-between">
+                    <div>
+                        <button class="btn btn-blue" [disabled]="!oracleConnectorForm.valid" (click)="onTest()">
+                            <i class="fa fa-link"></i> Test Connector
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-gray mr-4" (click)="onClose()">
                         <i class="fa fa-times"></i> Close
-                    </button>
-                    <button class="btn btn-blue" [disabled]="!oracleConnectorForm.valid" (click)="onSave()">
-                        <i class="fa fa-save"></i> {{0 === id ? 'Create' : 'Update'}}
-                    </button>
+                        </button>
+                        <button class="btn btn-blue" [disabled]="!oracleConnectorForm.valid" (click)="onSave()">
+                            <i class="fa fa-save"></i> {{0 === id ? 'Create' : 'Update'}}
+                        </button>
+                    </div>
                 </div>
             </form>
         </div>

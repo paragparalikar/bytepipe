@@ -38,12 +38,18 @@ export class OracleConnectorEditorComponent {
     connector.type = "ORACLE";
     this.connectorService.create(connector).subscribe(result => {
       console.log(result);
+      this.oracleConnectorForm.reset();
+      this.onClose();
     });
   }
 
   onClose(){
     const editor = document.getElementById("oracle-connector-editor");
     editor?.classList.add('hidden');
+  }
+
+  onTest(){
+    
   }
 
 }
