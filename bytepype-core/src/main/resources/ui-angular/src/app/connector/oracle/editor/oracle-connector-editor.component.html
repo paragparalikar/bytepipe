@@ -1,32 +1,43 @@
-<div id="page-container" class="h-full w-full place-items-center place-content-center">
-    <form [formGroup]="oracleConnectorForm" class="card h-fit w-200 [&>div]:flex [&>div]:items-center [&>div]:py-3">
-
-        <p class="text-3xl pb-3"><i class="fa fa-plug"></i> {{0 === id ? 'Create New Oracle Connector' : 'Modify Oracle Connector {{id}}'}}</p>
-        <div>
-            <label class="w-1/4 form-label" for="name">Name</label>
+<form [formGroup]="oracleConnectorForm" class="card h-fit w-170 [&>div]:flex [&>div]:items-center [&>div]:py-2">
+    <p class="text-3xl pb-3"><i class="fa fa-plug"></i> {{0 === id ? 'Create New Oracle Connector' : 'Modify Oracle
+        Connector {{id}}'}}</p>
+    <div>
+        <label class="w-1/4 form-label" for="name">Name</label>
+        <div class="block w-full">
             <input class="w-3/4 input-text" type="text" id="name" formControlName="name">
+            <form-error [control]="oracleConnectorForm.controls.name" [name]="'Name'" />
         </div>
-        <div>
-            <label class="w-1/4 form-label" for="description">Description</label>
+    </div>
+    <div>
+        <label class="w-1/4 form-label" for="description">Description</label>
+        <div class="block w-full">
             <textarea class="w-3/4 input-text" id="description" formControlName="description"></textarea>
+            <form-error [control]="oracleConnectorForm.controls.description" [name]="'Description'" />
         </div>
-        <div>
-            <label class="w-1/4 form-label" for="url">URL</label>
+    </div>
+    <div>
+        <label class="w-1/4 form-label" for="url">URL</label>
+        <div class="block w-full">
             <input class="w-3/4 input-text" type="text" id="url" formControlName="url">
+            <form-error [control]="oracleConnectorForm.controls.url" [name]="'URL'" />
         </div>
-        <div>
-            <label class="w-1/4 form-label" for="username">Username</label>
+    </div>
+    <div>
+        <label class="w-1/4 form-label" for="username">Username</label>
+        <div class="block w-full">
             <input class="w-3/4 input-text" type="text" id="username" formControlName="username">
+            <form-error [control]="oracleConnectorForm.controls.username" [name]="'Username'" />
         </div>
-        <div>
-            <label class="w-1/4 form-label" for="password">Password</label>
+    </div>
+    <div>
+        <label class="w-1/4 form-label" for="password">Password</label>
+        <div class="block w-full">
             <input class="w-3/4 input-text" type="password" id="password" formControlName="password">
+            <form-error [control]="oracleConnectorForm.controls.password" [name]="'Password'" />
         </div>
-        <div class="py-4 flex justify-end">
-            <div>
-                <button class="btn btn-blue" [disabled]="!oracleConnectorForm.valid" (click)="onSave()"><i class="fa fa-save"></i> {{0 === id ? 'Create' : 'Update'}}</button>
-            </div>
-            
-        </div>
-    </form>
-</div>
+    </div>
+    <div class="py-4 flex justify-end">
+        <button class="btn btn-blue" [disabled]="!oracleConnectorForm.valid" (click)="onSave()"><i
+                class="fa fa-save"></i> {{0 === id ? 'Create' : 'Update'}}</button>
+    </div>
+</form>

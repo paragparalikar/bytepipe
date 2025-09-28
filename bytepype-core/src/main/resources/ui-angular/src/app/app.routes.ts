@@ -12,7 +12,6 @@ export const routes: Routes = [
         children: [
             {path: 'dashboard', component: DashboardComponent},
             {path: 'connectors', component: ConnectorComponent},
-            {path: 'connectors/oracle/:id', component: OracleConnectorEditorComponent},
             {path: 'transformers', component: DashboardComponent},
             {path: 'data-flows', component: DashboardComponent},
             {path: 'reports', component: DashboardComponent},

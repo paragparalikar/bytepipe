@@ -1,9 +1,9 @@
-<div id="page-container" class="h-full w-full">
+<div id="page-container" class="h-full w-full justify-center items-center">
     <div id="title-bar" class="flex p-4 justify-between">
         <p id="title-text" class="text-4xl"><i class="fa fa-plug"></i> Connectors</p>
-        <button class="btn btn-blue" [routerLink]="['/connectors/oracle/0']"><i class="fa fa-plus"></i> Create New Connector</button>
-        
-        
+        <button class="btn btn-blue" (click)="edit(0)"><i class="fa fa-plus"></i> Create New Connector</button>
     </div>
-
+    <div id="oracle-connector-editor" class="hidden">
+            <app-oracle-connector-editor  class="block w-full place-items-center place-content-center" [id]="id"/>
+    </div>
 </div>
