@@ -49,7 +49,10 @@
 .form-label {
   @apply block text-gray-500 font-bold pr-4;
 }
-
+.required:after {
+    content:" *";
+    @apply text-red-500;
+}
 
 
 

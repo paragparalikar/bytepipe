@@ -1,9 +1,7 @@
-import { Component, Input, numberAttribute, Signal, signal } from '@angular/core';
+import { Component } from '@angular/core';
 import {FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorComponent } from '../../../common/form-error/form-error.component';
-import { ConnectConfig } from 'rxjs';
 import { Connector } from '../../connector.model';
-import { ConnectorType } from '../../connector-type.enum';
 import { ConnectorService } from '../../connector.service';
 
 
@@ -38,18 +36,18 @@ export class OracleConnectorEditorComponent {
     connector.type = "ORACLE";
     this.connectorService.create(connector).subscribe(result => {
       console.log(result);
-      this.oracleConnectorForm.reset();
       this.onClose();
     });
   }
 
   onClose(){
+    this.oracleConnectorForm.reset();
     const editor = document.getElementById("oracle-connector-editor");
     editor?.classList.add('hidden');
   }
 
   onTest(){
-    
+
   }
 
 }
