@@ -1,4 +1,4 @@
-import { Component, Input, numberAttribute } from '@angular/core';
+import { Component, Input, numberAttribute, Signal, signal } from '@angular/core';
 import {FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorComponent } from '../../../common/form-error/form-error.component';
 
@@ -11,7 +11,8 @@ import { ErrorComponent } from '../../../common/form-error/form-error.component'
 })
 export class OracleConnectorEditorComponent {
 
-  @Input({transform: numberAttribute}) id = 0;
+  id: number = 0;
+
   oracleConnectorForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
     description: new FormControl('', Validators.maxLength(255)),
@@ -20,8 +21,19 @@ export class OracleConnectorEditorComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)])
   });
 
+  show(id: number){
+    this.id = id;
+    const editor = document.getElementById("oracle-connector-editor");
+    editor?.classList.remove('hidden');
+  }
+
   onSave() {
     
+  }
+
+  onClose(){
+    const editor = document.getElementById("oracle-connector-editor");
+    editor?.classList.add('hidden');
   }
 
 }

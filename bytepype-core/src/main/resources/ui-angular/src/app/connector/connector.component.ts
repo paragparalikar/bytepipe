@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, ViewChild } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { OracleConnectorEditorComponent } from './oracle/editor/oracle-connector-editor.component';
 
@@ -12,11 +12,10 @@ import { OracleConnectorEditorComponent } from './oracle/editor/oracle-connector
 export class ConnectorComponent {
 
   id?: number|null;
+  @ViewChild('oracleConnectorEditor') oracleConnectorEditor!: OracleConnectorEditorComponent;
 
-  edit(id?: number|null){
-    this.id = id;
-    const editor = document.getElementById('oracle-connector-editor');
-    editor?.classList.toggle('hidden');
+  onCreate(){
+    this.oracleConnectorEditor.show(0);
   }
 
 }
