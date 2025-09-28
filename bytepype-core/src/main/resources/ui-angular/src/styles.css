@@ -3,5 +3,17 @@
 
 :root{
     font-size: 14px;
+    font-weight: 500;
     font-family: "Quicksand"; 
+    color: oklch(37.2% 0.044 257.287);
 }
+
+.btn {
+    @apply font-bold py-2 px-4 rounded;
+  }
+  .btn-blue {
+    @apply bg-blue-500 text-white;
+  }
+  .btn-blue:hover {
+    @apply bg-blue-700;
+  }
