@@ -30,4 +30,8 @@ export class ConnectorComponent implements OnInit {
     this.oracleConnectorEditor.show(0);
   }
 
+  onEdit(id: number){
+    this.oracleConnectorEditor.show(id);
+  }
+
 }

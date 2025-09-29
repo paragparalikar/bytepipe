@@ -13,6 +13,10 @@ export class ConnectorService {
 
   constructor(private http:HttpClient) { }
 
+  findById(id: number): Observable<Connector> {
+    return this.http.get(this.baseUrl + "/" + id);
+  }
+
   findAll(): Observable<Connector[]> {
     return this.http.get<Connector[]>(this.baseUrl);
   }
@@ -20,4 +24,9 @@ export class ConnectorService {
   create(connector: Connector): Observable<Connector>{
     return this.http.post<Connector>(this.baseUrl, connector);
   }
+
+  update(id: number, connector: Connector): Observable<Connector>{
+    return this.http.put<Connector>(this.baseUrl + "/" + id, connector);
+  }
+
 }

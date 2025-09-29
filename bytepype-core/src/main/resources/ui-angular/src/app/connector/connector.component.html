@@ -41,7 +41,7 @@
                     <button data-title="View Details" class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-2.5 rounded-full cursor-pointer mx-1">
                         <i class="fa fa-eye"></i>
                     </button>
-                    <button data-title="Edit" class="bg-blue-200 hover:bg-blue-300 text-blue-600 font-bold py-2 px-2.5 rounded-full cursor-pointer">
+                    <button (click)="onEdit(connector.id!)" data-title="Edit" class="bg-blue-200 hover:bg-blue-300 text-blue-600 font-bold py-2 px-2.5 rounded-full cursor-pointer">
                         <i class="fa fa-edit"></i>
                     </button>
                 </span>

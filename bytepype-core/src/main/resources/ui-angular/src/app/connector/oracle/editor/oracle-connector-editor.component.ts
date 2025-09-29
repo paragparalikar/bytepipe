@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import {FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ErrorComponent } from '../../../common/form-error/form-error.component';
 import { Connector } from '../../connector.model';
 import { ConnectorService } from '../../connector.service';
 import { MessageService } from '../../../navbar/message-bar/message.service';
 import { MessageType } from '../../../navbar/message-bar/message.interface'
+import { OracleConnector } from '../../connector-oracle.model';
 
 
 @Component({
@@ -20,7 +21,7 @@ export class OracleConnectorEditorComponent {
   constructor(
     private connectorService: ConnectorService,
     private messageService: MessageService
-  ){}
+  ) { }
 
   oracleConnectorForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
@@ -30,35 +31,50 @@ export class OracleConnectorEditorComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)])
   });
 
-  show(id: number){
+  show(id: number) {
     this.id = id;
     const editor = document.getElementById("oracle-connector-editor");
     editor?.classList.remove('hidden');
+    if (0 < id) {
+      this.connectorService.findById(id).subscribe(connector => {
+        this.oracleConnectorForm.patchValue(connector);
+      });
+    }
   }
 
   onSave() {
     let connector: Connector = new Connector(this.oracleConnectorForm.value);
     connector.type = "ORACLE";
-    this.connectorService.create(connector).subscribe({
-      next: (result) => {
-        this.messageService.addMessage(`Oracle Connector ${result.name} successfuly created`, 'success');
-        console.log(result);
-        this.onClose();
-      },
-      error: (error) => {
-        this.messageService.addMessage(error, 'danger');
-        console.log(error);
-      }
-    });
+    if (0 === this.id) {
+      this.connectorService.create(connector).subscribe({
+        next: (result) => {
+          this.messageService.addMessage(`Oracle Connector ${result.name} successfuly created`, 'success');
+          this.onClose();
+        },
+        error: (error) => {
+          this.messageService.addMessage(error, 'danger');
+        }
+      });
+    } else {
+      this.connectorService.update(this.id, connector).subscribe({
+        next: (result) => {
+          this.messageService.addMessage(`Oracle Connector ${result.name} successfuly updated`, 'success');
+          this.onClose();
+        },
+        error: (error) => {
+          this.messageService.addMessage(error, 'danger');
+        }
+      });
+    }
   }
 
-  onClose(){
+  onClose() {
     this.oracleConnectorForm.reset();
     const editor = document.getElementById("oracle-connector-editor");
     editor?.classList.add('hidden');
   }
 
-  onTest(){
+  onTest() {
 
   }
 

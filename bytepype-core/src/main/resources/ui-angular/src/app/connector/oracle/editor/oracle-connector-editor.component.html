@@ -5,9 +5,7 @@
             <form [formGroup]="oracleConnectorForm"
                 class="card h-fit w-170 [&>div]:flex [&>div]:items-center [&>div]:py-2">
                 <div class="flex justify-between">
-                    <p class="text-3xl pb-3"><i class="fa fa-plug"></i> {{0 === id ? 'Create New Oracle Connector' : 'Modify
-                    Oracle
-                    Connector {{id}}'}}</p>
+                    <p class="text-3xl pb-3"><i class="fa fa-plug"></i> {{0 === id ? 'Create New Oracle Connector' : 'Modify Oracle Connector'}}</p>
                     <button (click)="onClose()" class="pt-1 px-2 mr-4 self-start justify-self-end cursor-pointer rounded-sm bg-gray-100 hover:bg-gray-200"><i class="fa fa-times"></i></button>
                 </div>
                 <hr class="hruler">
