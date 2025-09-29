@@ -13,6 +13,6 @@ export class Connector {
     createdBy?: string|null;
     createdDate?: Date|null;
     lastUpdatedBy?: string|null;
-    lastUpdatedDate?: string|null;
+    lastUpdatedDate?: Date|null;
 
 }

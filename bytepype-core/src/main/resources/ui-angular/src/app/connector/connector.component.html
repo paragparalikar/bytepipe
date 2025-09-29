@@ -4,4 +4,32 @@
         <button class="btn btn-blue" (click)="onCreate()"><i class="fa fa-plus"></i> Create New Connector</button>
     </div>
     <app-oracle-connector-editor #oracleConnectorEditor/>
+    <div class="flex flex-wrap">
+        <div *ngFor="let connector of connectors" class="card h-60 w-120 ml-5 mt-5">
+            <div class="flex justify-between h-8">
+                <span class="text-2xl font-bold">{{connector.id}}. {{connector.name}}</span>
+                <app-connector-type [type]="connector.type"></app-connector-type>
+            </div>   
+            <!--<div class="mt-0 mb-2 h-1 flex justify-end">
+                <app-created-by text="Created By" [date]="connector.createdDate" [userId]="connector.createdBy"></app-created-by>
+            </div> -->
+            <div class="h-34">
+                <p class="text-sm py-2">{{connector.description}}</p>
+            </div>
+            <div class="flex justify-between h-8 items-end">
+                <app-created-by text="Created By" [date]="connector.createdDate" [userId]="connector.createdBy"></app-created-by>
+                <span>
+                    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-3 rounded-full cursor-pointer">
+                        <i class="fa fa-trash"></i>
+                    </button>
+                    <button class="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-3 rounded-full  cursor-pointer mx-1">
+                        <i class="fa fa-eye"></i>
+                    </button>
+                    <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-3 rounded-full cursor-pointer">
+                        <i class="fa fa-edit"></i>
+                    </button>
+                </span>
+            </div>
+        </div>
+    </div>
 </div>
