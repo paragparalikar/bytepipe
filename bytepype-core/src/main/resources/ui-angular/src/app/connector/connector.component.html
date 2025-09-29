@@ -16,16 +16,16 @@
             <div class="h-34">
                 <p class="text-sm py-2">{{connector.description}}</p>
             </div>
-            <div class="flex justify-between h-8 items-end">
+            <div class="flex justify-between h-8 items-end text-xs">
                 <app-created-by text="Created By" [date]="connector.createdDate" [userId]="connector.createdBy"></app-created-by>
                 <span>
-                    <button class="bg-red-200 hover:bg-red-300 text-red-600 font-bold py-2 px-3 rounded-full cursor-pointer">
+                    <button data-title="Delete" class="bg-red-200 hover:bg-red-300 text-red-600 font-bold py-2 px-2.5 rounded-full cursor-pointer">
                         <i class="fa fa-trash"></i>
                     </button>
-                    <button class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-3 rounded-full  cursor-pointer mx-1">
+                    <button data-title="View Details" class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-2.5 rounded-full  cursor-pointer mx-1">
                         <i class="fa fa-eye"></i>
                     </button>
-                    <button class="bg-blue-200 hover:bg-blue-300 text-blue-600 font-bold py-2 px-3 rounded-full cursor-pointer">
+                    <button data-title="Edit" class="bg-blue-200 hover:bg-blue-300 text-blue-600 font-bold py-2 px-2.5 rounded-full cursor-pointer">
                         <i class="fa fa-edit"></i>
                     </button>
                 </span>
