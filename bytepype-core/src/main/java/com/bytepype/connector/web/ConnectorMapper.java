@@ -6,6 +6,7 @@ import com.bytepype.connector.oracle.OracleConnector;
 import com.bytepype.connector.web.dto.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 import org.mapstruct.SubclassMapping;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -56,4 +57,12 @@ public abstract class ConnectorMapper {
     public Connector<?> toConnector(Long id){
         return connectorService.findById(id);
     }
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "type", ignore = true)
+    @Mapping(target = "createdBy", ignore = true)
+    @Mapping(target = "createdDate", ignore = true)
+    @Mapping(target = "lastModifiedBy", ignore = true)
+    @Mapping(target = "lastModifiedDate", ignore = true)
+    public abstract void copy(@MappingTarget Connector<?> connector, Connector<?> source);
 }
