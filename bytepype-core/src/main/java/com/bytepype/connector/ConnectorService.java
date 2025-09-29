@@ -32,9 +32,6 @@ public class ConnectorService {
     }
 
     public Connector<?> update(@NotNull @Valid @UniqueConnector final Connector<?> connector){
-        if(!connectorRepository.existsById(connector.getId())){
-            throw new ConnectorNotFoundException(connector.getId());
-        }
         return connectorRepository.save(connector);
     }
 

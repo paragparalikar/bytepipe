@@ -45,8 +45,9 @@ public class ConnectorController {
             @PathVariable("id") @NotNull final Long id,
             @NotNull @Valid @RequestBody final UpdateConnectorRequestDTO dto){
         final Connector<?> connector = connectorMapper.toConnector(dto);
-        connector.setId(id);
-        final Connector<?> managedConnector = connectorService.update(connector);
+        final Connector<?> managedConnector = connectorService.findById(id);
+        connectorMapper.copy(managedConnector, connector);
+        connectorService.update(managedConnector);
         return connectorMapper.toConnectorDTO(managedConnector);
     }
 
