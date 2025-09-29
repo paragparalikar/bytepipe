@@ -1,0 +1,73 @@
+<div class="fixed top-4 right-4 z-50 flex flex-col items-end space-y-2">
+  @for (message of messageService.messages(); track message.id) {
+    <div
+      class="flex items-center rounded-lg border px-4 py-3 shadow-md transition-all duration-300 ease-in-out"
+      [ngClass]="getClassForMessageType(message.type)"
+    >
+      <div class="mr-3">
+        @if (message.type === 'success') {
+          <svg
+            class="h-6 w-6 text-green-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        } @else if (message.type === 'warning') {
+          <svg
+            class="h-6 w-6 text-yellow-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M8.257 3.323a1 1 0 011.486 0l5.5 9.5a1 1 0 01-.743 1.677H3.5a1 1 0 01-.743-1.677l5.5-9.5zM10 13a1 1 0 100-2 1 1 0 000 2zm0 4a1 1 0 100-2 1 1 0 000 2z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        } @else if (message.type === 'info') {
+          <svg
+            class="h-6 w-6 text-blue-500"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 11-2 0 1 1 0 012 0zm-1 3a1 1 0 100 2h.01a1 1 0 100-2H10z"
+              clip-rule="evenodd"
+            />
+          </svg>
+        } @else if (message.type === 'danger') {
+          <!-- Danger icon (error X circle) -->
+          <svg class="h-6 w-6 text-red-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+          </svg>
+        }
+      </div>
+      <p class="text-sm font-medium">{{ message.text }}</p>
+      <button
+        (click)="onClose(message.id)"
+        class="ml-4 rounded-full p-1 transition-colors hover:bg-gray-200"
+      >
+        <svg
+          class="h-4 w-4"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M6 18L18 6M6 6l12 12"
+          />
+        </svg>
+      </button>
+    </div>
+  }
+</div>
