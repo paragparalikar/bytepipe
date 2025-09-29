@@ -10,11 +10,27 @@
                 <span class="text-2xl font-bold">{{connector.id}}. {{connector.name}}</span>
                 <app-connector-type [type]="connector.type"></app-connector-type>
             </div>   
-            <!--<div class="mt-0 mb-2 h-1 flex justify-end">
-                <app-created-by text="Created By" [date]="connector.createdDate" [userId]="connector.createdBy"></app-created-by>
-            </div> -->
             <div class="h-34">
-                <p class="text-sm py-2">{{connector.description}}</p>
+                <p class="text-sm py-2 h-17">{{connector.description}}</p>
+                <div class="flex justify-between h-17 [&>div]:p-3 
+                    [&>div>p:first-child]:text-xl [&>div>p:first-child]:font-semibold [&>div>p:first-child]:text-center
+                    [&>div>p:last-child]:text-xs
+                    [&>span]:border [&>span]:border-gray-300 [&>span]:w-0">
+                    <div>
+                        <p>23</p>
+                        <p>million events</p>
+                    </div>
+                    <span></span>
+                    <div>
+                        <p>400</p>
+                        <p>errors found</p>
+                    </div>
+                    <span></span>
+                    <div>
+                        <p>567</p>
+                        <p>hours uptime</p>
+                    </div>
+                </div>
             </div>
             <div class="flex justify-between h-8 items-end text-xs">
                 <app-created-by text="Created By" [date]="connector.createdDate" [userId]="connector.createdBy"></app-created-by>
