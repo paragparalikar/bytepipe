@@ -11,8 +11,6 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  public create(user: any): Observable<Object> {
-    return this.httpClient.post(this.baseUrl + '/users', user);
-  }
+  
 
 }

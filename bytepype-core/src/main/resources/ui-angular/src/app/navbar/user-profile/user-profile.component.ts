@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OidcSecurityService } from 'angular-auth-oidc-client';
+import { AuthService } from '../../auth/auth.service';
 
 @Component({
   selector: 'app-user-profile',
@@ -11,13 +11,18 @@ export class UserProfileComponent implements OnInit {
   name: string|undefined;
   picture: string|undefined;
 
-  constructor (private securityService: OidcSecurityService) { }
+  constructor (private authService: AuthService) { }
 
    ngOnInit(): void {
-    const userDataSignal = this.securityService.userData;
-    const userData = userDataSignal().allUserData.find(entry => entry.userData)?.userData;
-    this.name = userData?.name;
-    this.picture = userData?.picture;
+    this.authService.getLoginResponse().subscribe(loginResponse => {
+      if(loginResponse){
+        this.name = loginResponse.userData.name;
+        this.picture = loginResponse.userData.picture;
+      } else {
+        this.name = undefined;
+        this.picture = undefined;
+      }
+    });
    }
 
 }
