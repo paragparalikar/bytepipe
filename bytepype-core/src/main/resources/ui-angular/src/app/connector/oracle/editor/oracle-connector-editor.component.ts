@@ -3,6 +3,8 @@ import {FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular
 import { ErrorComponent } from '../../../common/form-error/form-error.component';
 import { Connector } from '../../connector.model';
 import { ConnectorService } from '../../connector.service';
+import { MessageService } from '../../../navbar/message-bar/message.service';
+import { MessageType } from '../../../navbar/message-bar/message.interface'
 
 
 @Component({
@@ -15,7 +17,10 @@ export class OracleConnectorEditorComponent {
 
   id: number = 0;
 
-  constructor(private connectorService: ConnectorService){}
+  constructor(
+    private connectorService: ConnectorService,
+    private messageService: MessageService
+  ){}
 
   oracleConnectorForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
@@ -34,9 +39,16 @@ export class OracleConnectorEditorComponent {
   onSave() {
     let connector: Connector = new Connector(this.oracleConnectorForm.value);
     connector.type = "ORACLE";
-    this.connectorService.create(connector).subscribe(result => {
-      console.log(result);
-      this.onClose();
+    this.connectorService.create(connector).subscribe({
+      next: (result) => {
+        this.messageService.addMessage(`Oracle Connector ${result.name} successfuly created`, 'success');
+        console.log(result);
+        this.onClose();
+      },
+      error: (error) => {
+        this.messageService.addMessage(error, 'danger');
+        console.log(error);
+      }
     });
   }
 
@@ -51,3 +63,7 @@ export class OracleConnectorEditorComponent {
   }
 
 }
+function next(value: Connector): void {
+  throw new Error('Function not implemented.');
+}
+
