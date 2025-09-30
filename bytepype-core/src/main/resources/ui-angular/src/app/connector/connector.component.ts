@@ -1,4 +1,4 @@
-import { Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
 import { OracleConnectorEditorComponent } from './oracle/editor/oracle-connector-editor.component';
 import { ConnectorService } from './connector.service';
 import { Connector } from './connector.model';
@@ -13,7 +13,7 @@ import { CreatedByComponent } from "../user/created-by/created-by.component";
   styleUrl: './connector.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
-export class ConnectorComponent implements OnInit {
+export class ConnectorComponent implements OnInit, AfterViewInit  {
 
   connectors: Connector[] = [];
   @ViewChild('oracleConnectorEditor') oracleConnectorEditor!: OracleConnectorEditorComponent;
@@ -21,6 +21,16 @@ export class ConnectorComponent implements OnInit {
   constructor(private connectorService: ConnectorService){}
 
   ngOnInit(): void {
+    this.refresh();
+  }
+
+  ngAfterViewInit(): void {
+    this.oracleConnectorEditor.isOpen.subscribe(value => {
+      if(!value) this.refresh();
+    });
+  }
+
+  private refresh(){
     this.connectorService.findAll().subscribe(connectors => {
       this.connectors = connectors;
     });

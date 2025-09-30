@@ -8,30 +8,37 @@
 }
 
 [data-title] {
-position: relative; /* Required for positioning the tooltip */
+  position: relative;
+  /* Required for positioning the tooltip */
 }
 
 [data-title]::after {
-content: attr(data-title); /* Fetches the value of data-title */
-position: absolute;
-top: -30px; /* Adjusts tooltip position */
-left: 50%;
-transform: translateX(-50%);
-background-color: #333; /* Tooltip background */
-color: #fff; /* Tooltip text color */
-padding: 5px 10px;
-border-radius: 5px;
-font-size: 14px;
-white-space: nowrap;
-box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-opacity: 0; /* Initially hidden */
-visibility: hidden;
-transition: opacity 0.3s ease, visibility 0.3s ease;
+  content: attr(data-title);
+  /* Fetches the value of data-title */
+  position: absolute;
+  top: -30px;
+  /* Adjusts tooltip position */
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  /* Tooltip background */
+  color: #fff;
+  /* Tooltip text color */
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  opacity: 0;
+  /* Initially hidden */
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
 }
 
 [data-title]:hover::after {
-opacity: 1; /* Show tooltip on hover */
-visibility: visible;
+  opacity: 1;
+  /* Show tooltip on hover */
+  visibility: visible;
 }
 
 
@@ -62,6 +69,7 @@ visibility: visible;
 .btn-gray:hover {
   @apply bg-gray-400;
 }
+
 .btn-danger {
   @apply bg-red-500 text-white;
 }
@@ -71,21 +79,25 @@ visibility: visible;
 }
 
 .card {
+  transition: transform 0.1s ease;
   @apply p-5 rounded-xl overflow-hidden bg-gray-50 shadow-lg;
 }
 
 .input-text {
   @apply bg-gray-100 appearance-none border-0 rounded w-full py-2 px-4 text-gray-700 leading-tight focus:outline-none focus:bg-white focus:border-purple-500;
 }
-.hruler{
+
+.hruler {
   @apply my-4 text-gray-300;
 }
+
 .form-label {
   @apply block text-gray-500 font-bold pr-4;
 }
+
 .required:after {
-    content:" *";
-    @apply text-red-500;
+  content: " *";
+  @apply text-red-500;
 }
 
 

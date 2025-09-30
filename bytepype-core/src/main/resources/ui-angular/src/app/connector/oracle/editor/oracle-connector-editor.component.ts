@@ -4,24 +4,28 @@ import { ErrorComponent } from '../../../common/form-error/form-error.component'
 import { Connector } from '../../connector.model';
 import { ConnectorService } from '../../connector.service';
 import { MessageService } from '../../../navbar/message-bar/message.service';
-import { MessageType } from '../../../navbar/message-bar/message.interface'
-import { OracleConnector } from '../../connector-oracle.model';
-
+import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-oracle-connector-editor',
   imports: [ErrorComponent, ReactiveFormsModule],
   templateUrl: './oracle-connector-editor.component.html',
-  styleUrl: './oracle-connector-editor.component.css'
+  styleUrl: './oracle-connector-editor.component.css',
+  
 })
 export class OracleConnectorEditorComponent {
 
   id: number = 0;
+  private isOpenSubject: Subject<boolean>;
+  isOpen: Observable<boolean>;
 
   constructor(
     private connectorService: ConnectorService,
     private messageService: MessageService
-  ) { }
+  ) { 
+    this.isOpenSubject = new Subject();
+    this.isOpen = this.isOpenSubject.asObservable();
+  }
 
   oracleConnectorForm = new FormGroup({
     name: new FormControl('', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]),
@@ -32,13 +36,17 @@ export class OracleConnectorEditorComponent {
   });
 
   show(id: number) {
+    this.isOpenSubject.next(true);
     this.id = id;
     const editor = document.getElementById("oracle-connector-editor");
-    editor?.classList.remove('hidden');
-    if (0 < id) {
-      this.connectorService.findById(id).subscribe(connector => {
-        this.oracleConnectorForm.patchValue(connector);
-      });
+    if(editor){
+      editor.classList.add('show');
+      editor.style.opacity = "1";
+      if (0 < id) {
+        this.connectorService.findById(id).subscribe(connector => {
+          this.oracleConnectorForm.patchValue(connector);
+        });
+      }
     }
   }
 
@@ -71,7 +79,11 @@ export class OracleConnectorEditorComponent {
   onClose() {
     this.oracleConnectorForm.reset();
     const editor = document.getElementById("oracle-connector-editor");
-    editor?.classList.add('hidden');
+    if(editor){
+      editor.classList.remove('show');
+      editor.style.opacity = "0";
+      this.isOpenSubject.next(false);
+    }
   }
 
   onTest() {
