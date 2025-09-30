@@ -1,14 +1,15 @@
-import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, effect, OnInit, ViewChild } from '@angular/core';
 import { OracleConnectorEditorComponent } from './oracle/editor/oracle-connector-editor.component';
 import { ConnectorService } from './connector.service';
 import { Connector } from './connector.model';
 import { NgFor } from '@angular/common';
 import { ConnectorTypeComponent } from './connector-type/connector-type.component';
 import { CreatedByComponent } from "../user/created-by/created-by.component";
+import { DeleteConfirmComponent } from './delete-confirm/delete-confirm.component';
 
 @Component({
   selector: 'app-connector',
-  imports: [NgFor, OracleConnectorEditorComponent, ConnectorTypeComponent, CreatedByComponent],
+  imports: [NgFor, OracleConnectorEditorComponent, DeleteConfirmComponent, ConnectorTypeComponent, CreatedByComponent],
   templateUrl: './connector.component.html',
   styleUrl: './connector.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -16,6 +17,7 @@ import { CreatedByComponent } from "../user/created-by/created-by.component";
 export class ConnectorComponent implements OnInit, AfterViewInit  {
 
   connectors: Connector[] = [];
+  @ViewChild('connectorDeleteConfirm') connectorDeleteConfirm!: DeleteConfirmComponent;
   @ViewChild('oracleConnectorEditor') oracleConnectorEditor!: OracleConnectorEditorComponent;
 
   constructor(private connectorService: ConnectorService){}
@@ -26,6 +28,9 @@ export class ConnectorComponent implements OnInit, AfterViewInit  {
 
   ngAfterViewInit(): void {
     this.oracleConnectorEditor.isOpen.subscribe(value => {
+      if(!value) this.refresh();
+    });
+    this.connectorDeleteConfirm.isOpen.subscribe(value => {
       if(!value) this.refresh();
     });
   }
@@ -42,6 +47,10 @@ export class ConnectorComponent implements OnInit, AfterViewInit  {
 
   onEdit(id: number){
     this.oracleConnectorEditor.show(id);
+  } 
+
+  onDelete(connector: Connector){
+    this.connectorDeleteConfirm.show(connector.id!, connector.name!);
   }
 
 }

@@ -3,6 +3,7 @@
         <p id="title-text" class="text-4xl"><i class="fa fa-plug"></i> Connectors</p>
         <button class="btn btn-blue" (click)="onCreate()"><i class="fa fa-plus"></i> Create New Connector</button>
     </div>
+    <app-delete-confirm #connectorDeleteConfirm/>
     <app-oracle-connector-editor #oracleConnectorEditor/>
     <div class="flex flex-wrap">
         <div *ngFor="let connector of connectors" class="card h-60 w-120 ml-5 mt-5 transition-opacity duration-700">
@@ -40,7 +41,7 @@
             <div class="flex justify-between h-8 items-end text-xs">
                 <app-created-by text="Created By" [date]="connector.createdDate" [userId]="connector.createdBy"></app-created-by>
                 <span>
-                    <button class="bg-red-200 hover:bg-red-300 text-red-600 font-bold py-2 px-2.5 rounded-full cursor-pointer">
+                    <button (click)="onDelete(connector)" class="bg-red-200 hover:bg-red-300 text-red-600 font-bold py-2 px-2.5 rounded-full cursor-pointer">
                         <i class="fa fa-trash"></i>
                     </button>
                     <button class="bg-gray-200 hover:bg-gray-300 text-gray-600 font-bold py-2 px-2.5 rounded-full cursor-pointer mx-1">
