@@ -29,4 +29,8 @@ export class ConnectorService {
     return this.http.put<Connector>(this.baseUrl + "/" + id, connector);
   }
 
+  deleteById(id: number){
+    return this.http.delete(this.baseUrl + '/' + id);
+  }
+
 }
