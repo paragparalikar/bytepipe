@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, effect, OnInit, ViewChild } from '@angular/core';
 import { OracleConnectorEditorComponent } from './oracle/editor/oracle-connector-editor.component';
 import { HttpConnectorEditorComponent } from './http/editor/http-connector-editor.component';
+import { KafkaConnectorEditorComponent } from './kafka/editor/kafka-connector-editor.component';
 import { ConnectorService } from './connector.service';
 import { Connector } from './connector.model';
 import { NgFor } from '@angular/common';
@@ -14,6 +15,7 @@ import { DeleteConfirmComponent } from './delete-confirm/delete-confirm.componen
     NgFor, 
     OracleConnectorEditorComponent, 
     HttpConnectorEditorComponent,
+    KafkaConnectorEditorComponent,
     DeleteConfirmComponent, 
     ConnectorTypeComponent, 
     CreatedByComponent
@@ -28,6 +30,7 @@ export class ConnectorComponent implements OnInit, AfterViewInit  {
   @ViewChild('connectorDeleteConfirm') connectorDeleteConfirm!: DeleteConfirmComponent;
   @ViewChild('oracleConnectorEditor') oracleConnectorEditor!: OracleConnectorEditorComponent;
   @ViewChild('httpConnectorEditor') httpConnectorEditor!: HttpConnectorEditorComponent;
+  @ViewChild('kafkaConnectorEditor') kafkaConnectorEditor!: KafkaConnectorEditorComponent;
 
   constructor(private connectorService: ConnectorService){}
 
@@ -40,6 +43,9 @@ export class ConnectorComponent implements OnInit, AfterViewInit  {
       if(!value) this.refresh();
     });
     this.httpConnectorEditor.isOpen.subscribe(value => {
+      if(!value) this.refresh();
+    });
+    this.kafkaConnectorEditor.isOpen.subscribe(value => {
       if(!value) this.refresh();
     });
     this.connectorDeleteConfirm.isOpen.subscribe(value => {
@@ -70,11 +76,19 @@ export class ConnectorComponent implements OnInit, AfterViewInit  {
     this.httpConnectorEditor.show(0);
   }
 
+  onCreateKafkaConnector(e: Event){
+    e.preventDefault();
+    this.onCreateConnector();
+    this.kafkaConnectorEditor.show(0);
+  }
+
   onEdit(connector: Connector){
     if (connector.type === 'ORACLE') {
       this.oracleConnectorEditor.show(connector.id!);
     } else if (connector.type === 'HTTP') {
       this.httpConnectorEditor.show(connector.id!);
+    } else if (connector.type === 'KAFKA') {
+      this.kafkaConnectorEditor.show(connector.id!);
     }
   }
 

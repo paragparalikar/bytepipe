@@ -14,7 +14,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="raised flex px-4 py-2 mx-2" href="#">
+                        <a class="raised flex px-4 py-2 mx-2" href="#" (click)="onCreateKafkaConnector($event)">
                             <img class="mr-2" src="kafka.svg" height="20" width="20" alt="connection-type-icon" />
                             Create New Kafka Connector
                         </a>
@@ -38,6 +38,7 @@
     <app-delete-confirm #connectorDeleteConfirm></app-delete-confirm>
     <app-oracle-connector-editor #oracleConnectorEditor></app-oracle-connector-editor>
     <app-http-connector-editor #httpConnectorEditor></app-http-connector-editor>
+    <app-kafka-connector-editor #kafkaConnectorEditor></app-kafka-connector-editor>
     <div class="flex flex-wrap">
         <div *ngFor="let connector of connectors" class="card h-60 w-120 ml-5 mt-5 transition-opacity duration-700">
             <div class="flex justify-between h-8">

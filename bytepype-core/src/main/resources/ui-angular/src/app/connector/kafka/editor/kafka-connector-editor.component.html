@@ -1,0 +1,226 @@
+<div #kafkaConnectorEditor class="modal">
+  <div class="flex">
+    <div class="absolute inset-0 bg-gray-500 opacity-75 z-0"></div>
+    <div class="absolute inset-0 place-items-center place-content-center z-10">
+      <form [formGroup]="kafkaConnectorForm" class="card h-fit w-200 [&>div]:flex [&>div]:items-center [&>div]:py-2">
+        <div class="flex justify-between">
+          <p class="flex text-3xl pb-3">
+            <img class="mr-2" src="kafka.svg" height="30" width="30" alt="connection-type-icon"/> {{id ? 'Modify Kafka Connector' : 'Create New Kafka Connector'}}
+          </p>
+          <button (click)="onClose()" class="pt-1 px-2 mr-4 self-start justify-self-end cursor-pointer rounded-sm bg-gray-100 hover:bg-gray-200">
+            <i class="fa fa-times"></i>
+          </button>
+        </div>
+
+        
+
+        <!-- Tab Navigation -->
+        <div class="flex border-b border-gray-200 -mx-4 px-4">
+          <button 
+            type="button"
+            (click)="switchTab('details')" 
+            [class]="activeTab === 'details' ? 'border-b-2 border-blue-500 text-blue-600 py-2 px-4 font-medium' : 'text-gray-500 hover:text-gray-700 py-2 px-4'">
+            Details
+          </button>
+          <button 
+            type="button"
+            (click)="switchTab('sasl')" 
+            [class]="activeTab === 'sasl' ? 'border-b-2 border-blue-500 text-blue-600 py-2 px-4 font-medium' : 'text-gray-500 hover:text-gray-700 py-2 px-4'"
+            [disabled]="!useSaslControl.value"
+            [class.opacity-50]="!useSaslControl.value"
+            [class.cursor-not-allowed]="!useSaslControl.value">
+            SASL
+          </button>
+          <button 
+            type="button"
+            (click)="switchTab('ssl')" 
+            [class]="activeTab === 'ssl' ? 'border-b-2 border-blue-500 text-blue-600 py-2 px-4 font-medium' : 'text-gray-500 hover:text-gray-700 py-2 px-4'"
+            [disabled]="!useSslControl.value"
+            [class.opacity-50]="!useSslControl.value"
+            [class.cursor-not-allowed]="!useSslControl.value">
+            SSL
+          </button>
+        </div>
+
+        
+
+        <!-- Details Tab -->
+        @if (activeTab === 'details') {
+          <div>
+            <label class="w-1/3 form-label required" for="name">Name</label>
+            <div class="block w-full">
+              <input class="w-2/3 input-text" type="text" id="name" formControlName="name">
+            </div>
+          </div>
+          <div>
+            <label class="w-1/3 form-label" for="description">Description</label>
+            <div class="block w-full">
+              <textarea class="w-2/3 input-text" id="description" formControlName="description" rows="2"></textarea>
+            </div>
+          </div>
+          <div>
+            <label class="w-1/3 form-label required" for="bootstrapServers">Bootstrap Servers</label>
+            <div class="block w-full">
+              <textarea class="w-2/3 input-text" id="bootstrapServers" formControlName="bootstrapServers" rows="3" placeholder="localhost:9092,localhost:9093"></textarea>
+            </div>
+          </div>
+          <div>
+            <div class="w-1/3"></div>
+            <div class="block w-full">
+              <div class="flex items-center">
+                <input type="checkbox" id="useSasl" formControlName="useSasl" class="mr-2">
+                <label for="useSasl" class="text-sm">Use SASL Authentication</label>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="w-1/3"></div>
+            <div class="block w-full">
+              <div class="flex items-center">
+                <input type="checkbox" id="useSsl" formControlName="useSsl" class="mr-2">
+                <label for="useSsl" class="text-sm">Use SSL Encryption</label>
+              </div>
+            </div>
+          </div>
+        }
+
+        <!-- SASL Tab -->
+        @if (activeTab === 'sasl') {
+          <div>
+            <label class="w-1/3 form-label required" for="saslMechanism">SASL Mechanism</label>
+            <div class="block w-full">
+              <select class="w-2/3 input-text" id="saslMechanism" formControlName="saslMechanism">
+                @for (mechanism of saslMechanisms; track mechanism.value) {
+                  <option [value]="mechanism.value">
+                    {{ mechanism.label }}
+                  </option>
+                }
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="w-1/3 form-label required" for="saslJaasConfig">SASL JAAS Config</label>
+            <div class="block w-full">
+              <textarea class="w-2/3 input-text" id="saslJaasConfig" formControlName="saslJaasConfig" rows="3" placeholder='org.apache.kafka.common.security.plain.PlainLoginModule required username="user" password="pass";'></textarea>
+            </div>
+          </div>
+
+          @if (saslMechanismControl.value === 'PLAIN' || saslMechanismControl.value === 'SCRAM-SHA-256' || saslMechanismControl.value === 'SCRAM-SHA-512') {
+            <div>
+              <label class="w-1/3 form-label required" for="username">Username</label>
+              <div class="block w-full">
+                <input class="w-2/3 input-text" type="text" id="username" formControlName="username">
+              </div>
+            </div>
+            <div>
+              <label class="w-1/3 form-label required" for="password">Password</label>
+              <div class="block w-full">
+                <input class="w-2/3 input-text" type="password" id="password" formControlName="password">
+              </div>
+            </div>
+          }
+
+          @if (saslMechanismControl.value === 'GSSAPI') {
+            <div>
+              <label class="w-1/3 form-label required" for="keytab">Keytab File</label>
+              <div class="block w-full">
+                <input class="w-2/3 input-text" type="text" id="keytab" formControlName="keytab" placeholder="Path to keytab file">
+              </div>
+            </div>
+            <div>
+              <label class="w-1/3 form-label required" for="principal">Kerberos Principal</label>
+              <div class="block w-full">
+                <input class="w-2/3 input-text" type="text" id="principal" formControlName="principal" placeholder="user@REALM">
+              </div>
+            </div>
+          }
+
+          @if (saslMechanismControl.value === 'OAUTHBEARER') {
+            <div>
+              <label class="w-1/3 form-label required" for="tokenEndpoint">Token Endpoint</label>
+              <div class="block w-full">
+                <input class="w-2/3 input-text" type="text" id="tokenEndpoint" formControlName="tokenEndpoint" placeholder="https://oauth.example.com/token">
+              </div>
+            </div>
+            <div>
+              <label class="w-1/3 form-label" for="clientId">Client ID</label>
+              <div class="block w-full">
+                <input class="w-2/3 input-text" type="text" id="clientId" formControlName="clientId">
+              </div>
+            </div>
+            <div>
+              <label class="w-1/3 form-label" for="clientSecret">Client Secret</label>
+              <div class="block w-full">
+                <input class="w-2/3 input-text" type="password" id="clientSecret" formControlName="clientSecret">
+              </div>
+            </div>
+          }
+        }
+
+        <!-- SSL Tab -->
+        @if (activeTab === 'ssl') {
+          <div>
+            <label class="w-1/3 form-label required" for="sslTruststore">SSL Truststore</label>
+            <div class="block w-full">
+              <input class="w-2/3 input-text" type="text" id="sslTruststore" formControlName="sslTruststore" placeholder="Path to truststore file">
+            </div>
+          </div>
+          <div>
+            <label class="w-1/3 form-label required" for="sslTruststorePassword">Truststore Password</label>
+            <div class="block w-full">
+              <input class="w-2/3 input-text" type="password" id="sslTruststorePassword" formControlName="sslTruststorePassword">
+            </div>
+          </div>
+          <div>
+            <label class="w-1/3 form-label required" for="sslKeystore">SSL Keystore</label>
+            <div class="block w-full">
+              <input class="w-2/3 input-text" type="text" id="sslKeystore" formControlName="sslKeystore" placeholder="Path to keystore file">
+            </div>
+          </div>
+          <div>
+            <label class="w-1/3 form-label required" for="sslKeystorePassword">Keystore Password</label>
+            <div class="block w-full">
+              <input class="w-2/3 input-text" type="password" id="sslKeystorePassword" formControlName="sslKeystorePassword">
+            </div>
+          </div>
+          <div>
+            <label class="w-1/3 form-label" for="sslKeyPassword">SSL Key Password</label>
+            <div class="block w-full">
+              <input class="w-2/3 input-text" type="password" id="sslKeyPassword" formControlName="sslKeyPassword">
+            </div>
+          </div>
+          <div>
+            <label class="w-1/3 form-label" for="sslEnabledProtocols">SSL Enabled Protocols</label>
+            <div class="block w-full">
+              <input class="w-2/3 input-text" type="text" id="sslEnabledProtocols" formControlName="sslEnabledProtocols" placeholder="TLSv1.2,TLSv1.3">
+            </div>
+          </div>
+          <div>
+            <label class="w-1/3 form-label" for="sslProtocol">SSL Protocol</label>
+            <div class="block w-full">
+              <input class="w-2/3 input-text" type="text" id="sslProtocol" formControlName="sslProtocol" placeholder="TLS">
+            </div>
+          </div>
+        }
+
+        <hr class="hruler">
+
+        <div class="py-4 flex justify-between">
+          <div>
+            <button class="btn btn-blue" [disabled]="!kafkaConnectorForm.valid" (click)="onTest()">
+              <i class="fa fa-link"></i> Test Connection
+            </button>
+          </div>
+          <div>
+            <button class="btn btn-gray mr-4" (click)="onClose()">
+              <i class="fa fa-times"></i> Close
+            </button>
+            <button class="btn btn-blue" [disabled]="!kafkaConnectorForm.valid" (click)="onSubmit()">
+              <i class="fa fa-save"></i> {{id ? 'Update' : 'Create'}}
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
