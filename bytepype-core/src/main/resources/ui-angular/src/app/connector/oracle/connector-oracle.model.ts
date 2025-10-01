@@ -1,5 +1,4 @@
-import { ConnectorType } from "./connector-type.enum";
-import { Connector } from "./connector.model";
+import { Connector } from "../connector.model";
 
 export class OracleConnector extends Connector {
 
