@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, CUSTOM_ELEMENTS_SCHEMA, effect, OnInit, ViewChild } from '@angular/core';
 import { OracleConnectorEditorComponent } from './oracle/editor/oracle-connector-editor.component';
+import { HttpConnectorEditorComponent } from './http/editor/http-connector-editor.component';
 import { ConnectorService } from './connector.service';
 import { Connector } from './connector.model';
 import { NgFor } from '@angular/common';
@@ -9,7 +10,14 @@ import { DeleteConfirmComponent } from './delete-confirm/delete-confirm.componen
 
 @Component({
   selector: 'app-connector',
-  imports: [NgFor, OracleConnectorEditorComponent, DeleteConfirmComponent, ConnectorTypeComponent, CreatedByComponent],
+  imports: [
+    NgFor, 
+    OracleConnectorEditorComponent, 
+    HttpConnectorEditorComponent,
+    DeleteConfirmComponent, 
+    ConnectorTypeComponent, 
+    CreatedByComponent
+  ],
   templateUrl: './connector.component.html',
   styleUrl: './connector.component.css',
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
@@ -19,6 +27,7 @@ export class ConnectorComponent implements OnInit, AfterViewInit  {
   connectors: Connector[] = [];
   @ViewChild('connectorDeleteConfirm') connectorDeleteConfirm!: DeleteConfirmComponent;
   @ViewChild('oracleConnectorEditor') oracleConnectorEditor!: OracleConnectorEditorComponent;
+  @ViewChild('httpConnectorEditor') httpConnectorEditor!: HttpConnectorEditorComponent;
 
   constructor(private connectorService: ConnectorService){}
 
@@ -28,6 +37,9 @@ export class ConnectorComponent implements OnInit, AfterViewInit  {
 
   ngAfterViewInit(): void {
     this.oracleConnectorEditor.isOpen.subscribe(value => {
+      if(!value) this.refresh();
+    });
+    this.httpConnectorEditor.isOpen.subscribe(value => {
       if(!value) this.refresh();
     });
     this.connectorDeleteConfirm.isOpen.subscribe(value => {
@@ -41,13 +53,30 @@ export class ConnectorComponent implements OnInit, AfterViewInit  {
     });
   }
 
-  onCreate(){
+  onCreateConnector(){
+    const menu = document.getElementById('dropdownMenu');
+    menu?.classList.toggle('hidden');
+  }
+
+  onCreateOracleConnector(e: Event){
+    e.preventDefault();
+    this.onCreateConnector();
     this.oracleConnectorEditor.show(0);
   }
 
-  onEdit(id: number){
-    this.oracleConnectorEditor.show(id);
-  } 
+  onCreateHttpConnector(e: Event){
+    e.preventDefault();
+    this.onCreateConnector();
+    this.httpConnectorEditor.show(0);
+  }
+
+  onEdit(connector: Connector){
+    if (connector.type === 'ORACLE') {
+      this.oracleConnectorEditor.show(connector.id!);
+    } else if (connector.type === 'HTTP') {
+      this.httpConnectorEditor.show(connector.id!);
+    }
+  }
 
   onDelete(connector: Connector){
     this.connectorDeleteConfirm.show(connector.id!, connector.name!);

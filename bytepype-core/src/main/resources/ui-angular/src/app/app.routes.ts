@@ -3,7 +3,6 @@ import { LoginComponent } from './security/login/login.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HomeComponent } from './home/home.component';
 import { ConnectorComponent } from './connector/connector.component';
-import { OracleConnectorEditorComponent } from './connector/oracle/editor/oracle-connector-editor.component';
 
 export const routes: Routes = [
     {
