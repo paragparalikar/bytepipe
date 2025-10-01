@@ -33,4 +33,7 @@ export class ConnectorService {
     return this.http.delete(this.baseUrl + '/' + id);
   }
 
+  test(connector: Connector): Observable<any> {
+    return this.http.post(`${this.baseUrl}/test`, connector);
+  }
 }

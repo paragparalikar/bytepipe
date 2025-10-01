@@ -26,7 +26,7 @@
                         </a>
                     </li>
                     <li>
-                        <a class="raised flex px-4 py-2 mx-2" href="#">
+                        <a class="raised flex px-4 py-2 mx-2" href="#" (click)="onCreateHttpConnector($event)">
                             <img class="mr-2" src="http.svg" height="20" width="20" alt="connection-type-icon" />
                             Create New HTTP Connector
                         </a>
@@ -35,8 +35,9 @@
             </div>
         </div>
     </div>
-    <app-delete-confirm #connectorDeleteConfirm />
-    <app-oracle-connector-editor #oracleConnectorEditor />
+    <app-delete-confirm #connectorDeleteConfirm></app-delete-confirm>
+    <app-oracle-connector-editor #oracleConnectorEditor></app-oracle-connector-editor>
+    <app-http-connector-editor #httpConnectorEditor></app-http-connector-editor>
     <div class="flex flex-wrap">
         <div *ngFor="let connector of connectors" class="card h-60 w-120 ml-5 mt-5 transition-opacity duration-700">
             <div class="flex justify-between h-8">
@@ -74,7 +75,7 @@
                         class="bg-red-200 hover:bg-red-300 text-red-600 font-bold py-2 px-2.5 rounded-full cursor-pointer mx-1">
                         <i class="fa fa-trash"></i>
                     </button>
-                    <button (click)="onEdit(connector.id!)"
+                    <button (click)="onEdit(connector)"
                         class="bg-blue-200 hover:bg-blue-300 text-blue-600 font-bold py-2 px-2.5 rounded-full cursor-pointer">
                         <i class="fa fa-edit"></i>
                     </button>
