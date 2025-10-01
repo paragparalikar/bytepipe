@@ -32,6 +32,7 @@ export class KafkaConnectorEditorComponent implements OnInit, OnDestroy {
   
   // Form controls with proper typing
   get nameControl(): FormControl { return this.kafkaConnectorForm.get('name') as FormControl; }
+  get topicControl(): FormControl { return this.kafkaConnectorForm.get('topic') as FormControl; }
   get bootstrapServersControl(): FormControl { return this.kafkaConnectorForm.get('bootstrapServers') as FormControl; }
   get useSaslControl(): FormControl { return this.kafkaConnectorForm.get('useSasl') as FormControl; }
   get useSslControl(): FormControl { return this.kafkaConnectorForm.get('useSsl') as FormControl; }
@@ -99,6 +100,7 @@ export class KafkaConnectorEditorComponent implements OnInit, OnDestroy {
     this.kafkaConnectorForm = this.formBuilder.group({
       // Details tab
       name: ['', [Validators.required, Validators.minLength(3)]],
+      topic: ['', [Validators.required, Validators.minLength(1)]],
       description: [''],
       bootstrapServers: ['', [Validators.required, Validators.minLength(1)]],
       useSasl: [false],

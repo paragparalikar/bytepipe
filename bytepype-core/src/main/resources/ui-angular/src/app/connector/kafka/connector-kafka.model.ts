@@ -2,6 +2,7 @@ import { Connector } from '../connector.model';
 
 export interface KafkaConnector extends Connector {
   // Details tab
+  topic: string;
   bootstrapServers: string;
   useSasl: boolean;
   useSsl: boolean;
