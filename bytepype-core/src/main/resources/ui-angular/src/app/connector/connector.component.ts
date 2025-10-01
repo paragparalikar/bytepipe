@@ -41,7 +41,14 @@ export class ConnectorComponent implements OnInit, AfterViewInit  {
     });
   }
 
-  onCreate(){
+  onCreateConnector(){
+    const menu = document.getElementById('dropdownMenu');
+    menu?.classList.toggle('hidden');
+  }
+
+  onCreateOracleConnector(e: Event){
+    e.preventDefault();
+    this.onCreateConnector();
     this.oracleConnectorEditor.show(0);
   }
 

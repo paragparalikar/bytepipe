@@ -1,16 +1,48 @@
 <div id="page-container" class="h-full w-full justify-center items-center overflow-y-scroll">
     <div id="title-bar" class="flex p-4 justify-between">
         <p id="title-text" class="text-4xl"><i class="fa fa-plug"></i> Connectors</p>
-        <button class="btn btn-blue" (click)="onCreate()"><i class="fa fa-plus"></i> Create New Connector</button>
+        <div class="relative inline-block">
+            <button class="btn btn-blue w-full" (click)="onCreateConnector()">
+                <i class="fa fa-plus"></i> Create New Connector
+            </button>
+            <div id="dropdownMenu" class="hidden well w-100 -mx-45 absolute">
+                <ul class="text-gray-700 my-2">
+                    <li>
+                        <a class="raised flex px-4 py-2 mx-2" href="#" (click)="onCreateOracleConnector($event)">
+                            <img class="mr-2" src="oracle.svg" height="20" width="20" alt="connection-type-icon" />
+                            Create New ORACLE Connector
+                        </a>
+                    </li>
+                    <li>
+                        <a class="raised flex px-4 py-2 mx-2" href="#">
+                            <img class="mr-2" src="kafka.svg" height="20" width="20" alt="connection-type-icon" />
+                            Create New Kafka Connector
+                        </a>
+                    </li>
+                    <li>
+                        <a class="raised flex px-4 py-2 mx-2" href="#">
+                            <img class="mr-2" src="elasticsearch.svg" height="20" width="20" alt="connection-type-icon" />
+                            Create New Elasticsearch Connector
+                        </a>
+                    </li>
+                    <li>
+                        <a class="raised flex px-4 py-2 mx-2" href="#">
+                            <img class="mr-2" src="http.svg" height="20" width="20" alt="connection-type-icon" />
+                            Create New HTTP Connector
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <app-delete-confirm #connectorDeleteConfirm/>
-    <app-oracle-connector-editor #oracleConnectorEditor/>
+    <app-delete-confirm #connectorDeleteConfirm />
+    <app-oracle-connector-editor #oracleConnectorEditor />
     <div class="flex flex-wrap">
         <div *ngFor="let connector of connectors" class="card h-60 w-120 ml-5 mt-5 transition-opacity duration-700">
             <div class="flex justify-between h-8">
                 <span class="text-2xl font-bold">{{connector.id}}. {{connector.name}}</span>
                 <app-connector-type [type]="connector.type"></app-connector-type>
-            </div>   
+            </div>
             <div class="h-34">
                 <p class="text-sm py-2 h-17">{{connector.description}}</p>
                 <div class="flex justify-between h-17 px-10
@@ -35,12 +67,15 @@
                 </div>
             </div>
             <div class="flex justify-between h-8 items-end text-xs">
-                <app-created-by text="Created By" [date]="connector.createdDate" [userId]="connector.createdBy"></app-created-by>
+                <app-created-by text="Created By" [date]="connector.createdDate"
+                    [userId]="connector.createdBy"></app-created-by>
                 <span>
-                    <button (click)="onDelete(connector)" class="bg-red-200 hover:bg-red-300 text-red-600 font-bold py-2 px-2.5 rounded-full cursor-pointer mx-1">
+                    <button (click)="onDelete(connector)"
+                        class="bg-red-200 hover:bg-red-300 text-red-600 font-bold py-2 px-2.5 rounded-full cursor-pointer mx-1">
                         <i class="fa fa-trash"></i>
                     </button>
-                    <button (click)="onEdit(connector.id!)" class="bg-blue-200 hover:bg-blue-300 text-blue-600 font-bold py-2 px-2.5 rounded-full cursor-pointer">
+                    <button (click)="onEdit(connector.id!)"
+                        class="bg-blue-200 hover:bg-blue-300 text-blue-600 font-bold py-2 px-2.5 rounded-full cursor-pointer">
                         <i class="fa fa-edit"></i>
                     </button>
                 </span>
