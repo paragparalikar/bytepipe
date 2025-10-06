@@ -2,60 +2,376 @@
     <div class="flex">
         <div class="absolute inset-0 bg-gray-500 opacity-75 z-0"></div>
         <div class="absolute inset-0 place-items-center place-content-center z-10">
-            <form [formGroup]="oracleConnectorForm"
-                class="card h-fit w-170 [&>div]:flex [&>div]:items-center [&>div]:py-2">
-                <div class="flex justify-between">
-                    <p class="text-3xl pb-3"><i class="fa fa-plug"></i> {{0 === id ? 'Create New Oracle Connector' : 'Modify Oracle Connector'}}</p>
-                    <button (click)="onClose()" class="pt-1 px-2 mr-4 self-start justify-self-end cursor-pointer rounded-sm bg-gray-100 hover:bg-gray-200"><i class="fa fa-times"></i></button>
+            <form [formGroup]="oracleConnectorForm" class="card w-200 max-h-[90vh] flex flex-col">
+                <!-- Fixed Header -->
+                <div class="flex justify-between items-center py-2">
+                    <p class="text-3xl pb-3">
+                        <i class="fa fa-database"></i> {{0 === id ? 'Create New Oracle Connector' : 'Modify Oracle Connector'}}
+                    </p>
+                    <button type="button" (click)="onClose()" class="pt-1 px-2 mr-4 self-start justify-self-end cursor-pointer rounded-sm bg-gray-100 hover:bg-gray-200">
+                        <i class="fa fa-times"></i>
+                    </button>
                 </div>
-                <hr class="hruler">
-                <div>
-                    <label class="w-1/4 form-label required" for="name">Name</label>
-                    <div class="block w-full">
-                        <input class="w-3/4 input-text" type="text" id="name" formControlName="name">
-                        <form-error [control]="oracleConnectorForm.controls.name" [name]="'Name'" />
-                    </div>
+
+                <!-- Scrollable Content Area -->
+                <div class="overflow-y-auto flex-1 px-4 [&>div]:flex [&>div]:items-center [&>div]:py-2">
+                <!-- Tab Navigation -->
+                <div class="flex border-b border-gray-200 mb-4">
+                    <button 
+                        type="button"
+                        (click)="setActiveTab('basic')" 
+                        [class]="activeTab === 'basic' ? 'px-4 py-2 border-b-2 border-blue-500 text-blue-600 font-medium' : 'px-4 py-2 text-gray-600 hover:text-gray-800'">
+                        Basic Information
+                    </button>
+                    <button 
+                        type="button"
+                        (click)="setActiveTab('credentials')" 
+                        [class]="activeTab === 'credentials' ? 'px-4 py-2 border-b-2 border-blue-500 text-blue-600 font-medium' : 'px-4 py-2 text-gray-600 hover:text-gray-800'">
+                        Credentials
+                    </button>
                 </div>
-                <div>
-                    <label class="w-1/4 form-label" for="description">Description</label>
-                    <div class="block w-full">
-                        <textarea class="w-3/4 input-text" id="description" formControlName="description"></textarea>
-                        <form-error [control]="oracleConnectorForm.controls.description" [name]="'Description'" />
-                    </div>
-                </div>
-                <div>
-                    <label class="w-1/4 form-label required" for="url">URL</label>
-                    <div class="block w-full">
-                        <input class="w-3/4 input-text" type="text" id="url" formControlName="url">
-                        <form-error [control]="oracleConnectorForm.controls.url" [name]="'URL'" />
-                    </div>
-                </div>
-                <div>
-                    <label class="w-1/4 form-label required" for="username">Username</label>
-                    <div class="block w-full">
-                        <input class="w-3/4 input-text" type="text" id="username" formControlName="username">
-                        <form-error [control]="oracleConnectorForm.controls.username" [name]="'Username'" />
-                    </div>
-                </div>
-                <div>
-                    <label class="w-1/4 form-label required" for="password">Password</label>
-                    <div class="block w-full">
-                        <input class="w-3/4 input-text" type="password" id="password" formControlName="password">
-                        <form-error [control]="oracleConnectorForm.controls.password" [name]="'Password'" />
-                    </div>
-                </div>
-                <hr class="hruler">
-                <div class="py-4 flex justify-between">
+
+                <!-- Tab 1: Basic Information -->
+                @if (activeTab === 'basic') {
                     <div>
-                        <button class="btn btn-blue" [disabled]="!oracleConnectorForm.valid" (click)="onTest()">
-                            <i class="fa fa-link"></i> Test Connector
+                        <label class="w-1/3 form-label required" for="name">Name</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="name" formControlName="name">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="description">Description</label>
+                        <div class="block w-full">
+                            <textarea class="w-2/3 input-text" id="description" formControlName="description" rows="2"></textarea>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="host">Host</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="host" formControlName="host" placeholder="localhost">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="port">Port</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="number" id="port" formControlName="port" placeholder="1521">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="sidServiceName">SID/Service Name</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="sidServiceName" formControlName="sidServiceName" placeholder="orcl or pdb1">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="tnsAlias">TNS Alias</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="tnsAlias" formControlName="tnsAlias" placeholder="Optional alternative to Host/Port/SID">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="authType">Authentication Type</label>
+                        <div class="block w-full">
+                            <select class="w-2/3 input-text" id="authType" formControlName="authType">
+                                @for (authType of authTypes; track authType.value) {
+                                    <option [value]="authType.value">
+                                        {{ authType.label }}
+                                    </option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                }
+
+                <!-- Tab 2: Credentials -->
+                @if (activeTab === 'credentials') {
+                
+                <!-- Basic Password Authentication -->
+                @if (authTypeControl.value === 'BASIC_PASSWORD') {
+                    <div>
+                        <label class="w-1/3 form-label required" for="username">Username</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="username" formControlName="username">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="password">Password</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="password" id="password" formControlName="password">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="sqlnetAllowedLogonVersionClient">SQLNet Allowed Logon Version Client</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="sqlnetAllowedLogonVersionClient" formControlName="sqlnetAllowedLogonVersionClient" placeholder="12a">
+                        </div>
+                    </div>
+                }
+                
+                <!-- Kerberos Authentication -->
+                @if (authTypeControl.value === 'KERBEROS') {
+                    <div>
+                        <label class="w-1/3 form-label required" for="kerberosPrincipal">Kerberos Principal</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="kerberosPrincipal" formControlName="kerberosPrincipal" placeholder="user@REALM">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="keytabFile">Keytab File</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="file" id="keytabFile" (change)="onFileChange($event, 'keytabFile')">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="kerberosConfigFile">Kerberos Config File</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="file" id="kerberosConfigFile" (change)="onFileChange($event, 'kerberosConfigFile')">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="realm">Realm</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="realm" formControlName="realm" placeholder="EXAMPLE.COM">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="sqlnetAuthenticationServices">SQLNet Authentication Services</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="sqlnetAuthenticationServices" formControlName="sqlnetAuthenticationServices" placeholder="KERBEROS5">
+                        </div>
+                    </div>
+                }
+                
+                <!-- RADIUS Authentication -->
+                @if (authTypeControl.value === 'RADIUS') {
+                    <div>
+                        <label class="w-1/3 form-label required" for="username">Username</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="username" formControlName="username">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="password">Password</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="password" id="password" formControlName="password">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="radiusServerHost">RADIUS Server Host</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="radiusServerHost" formControlName="radiusServerHost">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="radiusServerPort">RADIUS Server Port</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="number" id="radiusServerPort" formControlName="radiusServerPort" placeholder="1812">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="sharedSecret">Shared Secret</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="password" id="sharedSecret" formControlName="sharedSecret">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="sqlnetAuthenticationServices">SQLNet Authentication Services</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="sqlnetAuthenticationServices" formControlName="sqlnetAuthenticationServices" placeholder="RADIUS">
+                        </div>
+                    </div>
+                }
+                
+                <!-- TLS/SSL PKI Authentication -->
+                @if (authTypeControl.value === 'TLS_SSL_PKI') {
+                    <div>
+                        <label class="w-1/3 form-label required" for="distinguishedName">Distinguished Name (DN)</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="distinguishedName" formControlName="distinguishedName" placeholder="cn=common.name">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="walletFile">Wallet File</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="file" id="walletFile" (change)="onFileChange($event, 'walletFile')">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="walletPassword">Wallet Password</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="password" id="walletPassword" formControlName="walletPassword" placeholder="If not autologin wallet">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="caCertificateFile">CA Certificate File</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="file" id="caCertificateFile" (change)="onFileChange($event, 'caCertificateFile')">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="sslVersion">SSL Version</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="sslVersion" formControlName="sslVersion" placeholder="TLSv1.3">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="sslClientAuthentication">SSL Client Authentication</label>
+                        <div class="block w-full">
+                            <input class="w-2/3" type="checkbox" id="sslClientAuthentication" formControlName="sslClientAuthentication">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="sqlnetAuthenticationServices">SQLNet Authentication Services</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="sqlnetAuthenticationServices" formControlName="sqlnetAuthenticationServices" placeholder="TCPS">
+                        </div>
+                    </div>
+                }
+                
+                <!-- Proxy Authentication -->
+                @if (authTypeControl.value === 'PROXY') {
+                    <div>
+                        <label class="w-1/3 form-label required" for="proxyUsername">Proxy Username</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="proxyUsername" formControlName="proxyUsername">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="proxyPassword">Proxy Password</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="password" id="proxyPassword" formControlName="proxyPassword" placeholder="If not using external">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="clientUsername">Client Username</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="clientUsername" formControlName="clientUsername">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="clientPassword">Client Password</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="password" id="clientPassword" formControlName="clientPassword" placeholder="If authentication required">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="roles">Roles</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="roles" formControlName="roles" placeholder="role1,role2">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="distinguishedName">Distinguished Name</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="distinguishedName" formControlName="distinguishedName" placeholder="For enterprise users">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="certificateFile">Certificate File</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="file" id="certificateFile" (change)="onFileChange($event, 'certificateFile')">
+                        </div>
+                    </div>
+                }
+                
+                <!-- MFA Authentication -->
+                @if (authTypeControl.value === 'MFA') {
+                    <div>
+                        <label class="w-1/3 form-label required" for="username">Username</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="username" formControlName="username">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="password">Password</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="password" id="password" formControlName="password">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="secondFactorType">Second Factor Type</label>
+                        <div class="block w-full">
+                            <select class="w-2/3 input-text" id="secondFactorType" formControlName="secondFactorType">
+                                <option value="">Select...</option>
+                                <option value="OMA_PUSH">Oracle Mobile Authenticator (Push)</option>
+                                <option value="DUO_PUSH">Cisco Duo (Push)</option>
+                                <option value="CERT_AUTH">Certificate Authentication</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="email">Email</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="email" id="email" formControlName="email" placeholder="For push registration">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="distinguishedName">Distinguished Name</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="distinguishedName" formControlName="distinguishedName" placeholder="For CERT_AUTH">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="mfaServerDetails">MFA Server Details</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="mfaServerDetails" formControlName="mfaServerDetails" placeholder="API host/URL for Duo">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="clientIdSecret">Client ID/Secret</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="password" id="clientIdSecret" formControlName="clientIdSecret" placeholder="For integration">
+                        </div>
+                    </div>
+                }
+                
+                <!-- External Wallet Authentication -->
+                @if (authTypeControl.value === 'EXTERNAL_WALLET') {
+                    <div>
+                        <label class="w-1/3 form-label required" for="walletFile">Wallet File</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="file" id="walletFile" (change)="onFileChange($event, 'walletFile')">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="walletPassword">Wallet Password</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="password" id="walletPassword" formControlName="walletPassword" placeholder="If not autologin">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label required" for="credentialAlias">Credential Alias</label>
+                        <div class="block w-full">
+                            <input class="w-2/3 input-text" type="text" id="credentialAlias" formControlName="credentialAlias" placeholder="orcl">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="w-1/3 form-label" for="sqlnetWalletOverride">SQLNet Wallet Override</label>
+                        <div class="block w-full">
+                            <input class="w-2/3" type="checkbox" id="sqlnetWalletOverride" formControlName="sqlnetWalletOverride">
+                        </div>
+                    </div>
+                }
+                
+                }
+                
+                </div>
+                <!-- End Scrollable Content Area -->
+
+                <!-- Fixed Footer -->
+                <hr class="hruler">
+
+                <div class="py-4 px-4 flex justify-between">
+                    <div>
+                        <button type="button" class="btn btn-blue" [disabled]="!oracleConnectorForm.valid" (click)="onTest()">
+                            <i class="fa fa-link"></i> Test Connection
                         </button>
                     </div>
                     <div>
-                        <button class="btn btn-gray mr-4" (click)="onClose()">
-                        <i class="fa fa-times"></i> Close
+                        <button type="button" class="btn btn-gray mr-4" (click)="onClose()">
+                            <i class="fa fa-times"></i> Close
                         </button>
-                        <button class="btn btn-blue" [disabled]="!oracleConnectorForm.valid" (click)="onSave()">
+                        <button type="button" class="btn btn-blue" [disabled]="!oracleConnectorForm.valid" (click)="onSave()">
                             <i class="fa fa-save"></i> {{0 === id ? 'Create' : 'Update'}}
                         </button>
                     </div>
