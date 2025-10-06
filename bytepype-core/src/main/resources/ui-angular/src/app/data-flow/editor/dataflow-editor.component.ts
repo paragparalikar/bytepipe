@@ -11,7 +11,7 @@ import { Observable, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-dataflow-editor',
-  imports: [ErrorComponent, ReactiveFormsModule, NgFor],
+  imports: [ErrorComponent, ReactiveFormsModule],
   templateUrl: './dataflow-editor.component.html',
   styleUrl: './dataflow-editor.component.css'
 })
