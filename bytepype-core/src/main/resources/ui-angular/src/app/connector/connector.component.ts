@@ -12,13 +12,13 @@ import { DeleteConfirmComponent } from './delete-confirm/delete-confirm.componen
 @Component({
   selector: 'app-connector',
   imports: [
-    NgFor, 
     OracleConnectorEditorComponent, 
     HttpConnectorEditorComponent,
     KafkaConnectorEditorComponent,
     DeleteConfirmComponent, 
     ConnectorTypeComponent, 
-    CreatedByComponent
+    CreatedByComponent,
+    NgFor
   ],
   templateUrl: './connector.component.html',
   styleUrl: './connector.component.css',

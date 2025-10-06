@@ -1,15 +1,17 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators, FormsModule } from '@angular/forms';
-import { Subscription, Observable, debounceTime, distinctUntilChanged } from 'rxjs';
 import { ConnectorService } from '../../connector.service';
 import { MessageService } from '../../../navbar/message-bar/message.service';
 import { HttpConnector } from '../connector-http.model';
 import { Connector } from '../../connector.model';
+import { debounceTime, distinctUntilChanged, Subscription } from 'rxjs';
 
 interface AuthTypeOption {
-  value: 'NONE' | 'BASIC' | 'BEARER' | 'API_KEY';
+  value: 'HTTP' | 'HTTPS_BASIC' | 'HTTPS_API_KEY' | 'HTTPS_BEARER' | 'HTTPS_CLIENT_CERT' | 'HTTPS_OIDC';
   label: string;
+  icon: string;
+  description: string;
 }
 
 @Component({
@@ -27,25 +29,24 @@ export class HttpConnectorEditorComponent implements OnInit, OnDestroy {
   @Input() id: number | null = null;
   @Output() isOpen = new EventEmitter<boolean>();
   @ViewChild('httpConnectorEditor') private modalElement!: ElementRef;
-
   httpConnectorForm!: FormGroup;
   
   // Form controls with proper typing
   get nameControl(): FormControl { return this.httpConnectorForm.get('name') as FormControl; }
-  get baseUrlControl(): FormControl { return this.httpConnectorForm.get('baseUrl') as FormControl; }
+  get hostsControl(): FormControl { return this.httpConnectorForm.get('hosts') as FormControl; }
   get authTypeControl(): FormControl { return this.httpConnectorForm.get('authType') as FormControl; }
-  get usernameControl(): FormControl { return this.httpConnectorForm.get('username') as FormControl; }
-  get passwordControl(): FormControl { return this.httpConnectorForm.get('password') as FormControl; }
-  get tokenControl(): FormControl { return this.httpConnectorForm.get('token') as FormControl; }
-  get apiKeyControl(): FormControl { return this.httpConnectorForm.get('apiKey') as FormControl; }
-  get apiKeyHeaderControl(): FormControl { return this.httpConnectorForm.get('apiKeyHeader') as FormControl; }
+  
   private subscription = new Subscription();
+  private autoSaveSubscription?: Subscription;
+  
   loading: boolean = false;
   submitted: boolean = false;
-
-  // Icons
-  // Using standard font-awesome classes instead of FontAwesome icons
-
+  isTesting = false;
+  lastSaved: Date | null = null;
+  
+  // Tab management
+  activeTab: 'basic' | 'credentials' | 'ssl' = 'basic';
+  
   constructor(
     private formBuilder: FormBuilder,
     private connectorService: ConnectorService,
@@ -78,37 +79,66 @@ export class HttpConnectorEditorComponent implements OnInit, OnDestroy {
 
   @ViewChild('nameInput') nameInput!: ElementRef<HTMLInputElement>;
   
-  isTesting = false;
-  lastSaved: Date | null = null;
-  private autoSaveSubscription?: Subscription;
-  
   // Auth types for the form
   authTypes: AuthTypeOption[] = [
-    { value: 'NONE', label: 'No Authentication' },
-    { value: 'BASIC', label: 'Basic Authentication' },
-    { value: 'BEARER', label: 'Bearer Token' },
-    { value: 'API_KEY', label: 'API Key' }
+    { value: 'HTTP', label: 'HTTP (Plain)', icon: 'fa-globe', description: 'Basic HTTP connection with optional basic authentication' },
+    { value: 'HTTPS_BASIC', label: 'HTTPS with Basic Auth', icon: 'fa-user-lock', description: 'Encrypted connection with username/password authentication' },
+    { value: 'HTTPS_API_KEY', label: 'HTTPS with API Key', icon: 'fa-key', description: 'Encrypted connection with API key authentication' },
+    { value: 'HTTPS_BEARER', label: 'HTTPS with Bearer Token', icon: 'fa-shield-alt', description: 'Encrypted connection with bearer token (JWT)' },
+    { value: 'HTTPS_CLIENT_CERT', label: 'HTTPS with Client Certificate', icon: 'fa-certificate', description: 'Mutual TLS with client certificate authentication' },
+    { value: 'HTTPS_OIDC', label: 'HTTPS with OpenID Connect', icon: 'fa-id-card', description: 'OpenID Connect for SSO authentication' }
   ];
+
+  setActiveTab(tab: 'basic' | 'credentials' | 'ssl'): void {
+    this.activeTab = tab;
+  }
 
   private initializeForm(): void {
     this.httpConnectorForm = this.formBuilder.group({
       // Basic Information
       name: ['', [Validators.required, Validators.minLength(3)]],
       description: [''],
-      baseUrl: ['', [Validators.required, Validators.pattern('https?://.+')]],
+      hosts: ['', [Validators.required, Validators.minLength(1)]],
       
       // Authentication
-      authType: ['NONE'],
+      authType: ['HTTP'],
+      
+      // Basic Auth fields
       username: [''],
       password: [''],
-      token: [''],
+      
+      // API Key Auth fields
       apiKey: [''],
-      apiKeyHeader: [''],
+      
+      // Bearer Token Auth fields
+      bearerToken: [''],
+      
+      // Client Certificate Auth fields
+      clientKeystoreFile: [null],
+      clientKeystorePassword: [''],
+      clientKeyPassword: [''],
+      
+      // OIDC Auth fields
+      clientId: [''],
+      clientSecret: [''],
+      issuer: [''],
+      authorizationEndpoint: [''],
+      tokenEndpoint: [''],
+      userinfoEndpoint: [''],
+      endSessionEndpoint: [''],
+      redirectUri: [''],
+      scopes: ['openid'],
+      responseType: ['code'],
+      
+      // SSL/TLS Configuration
+      caCertificateFingerprint: [''],
+      caCertificateFile: [null],
+      sslEnabledProtocols: ['TLSv1.2,TLSv1.3'],
+      sslProtocol: ['TLS'],
       
       // Advanced Settings
       timeout: [30000, [Validators.min(0)]],
       maxRetries: [3, [Validators.min(0)]],
-      sslVerification: [true],
       followRedirects: [true],
       
       // Metadata
@@ -145,18 +175,15 @@ export class HttpConnectorEditorComponent implements OnInit, OnDestroy {
   
   private setupAuthTypeControls(): void {
     const authTypeControl = this.httpConnectorForm.get('authType');
-    const usernameControl = this.httpConnectorForm.get('username');
-    const passwordControl = this.httpConnectorForm.get('password');
-    const tokenControl = this.httpConnectorForm.get('token');
-    const apiKeyControl = this.httpConnectorForm.get('apiKey');
-    const apiKeyHeaderControl = this.httpConnectorForm.get('apiKeyHeader');
 
-    if (authTypeControl && usernameControl && passwordControl && tokenControl && apiKeyControl && apiKeyHeaderControl) {
+    if (authTypeControl) {
       this.subscription.add(
         authTypeControl.valueChanges.subscribe(authType => {
-          this.updateAuthValidators(authType, usernameControl, passwordControl, tokenControl, apiKeyControl, apiKeyHeaderControl);
+          this.updateAuthValidators(authType);
         })
       );
+      // Initialize validators for the default auth type
+      this.updateAuthValidators(authTypeControl.value);
     }
   }
   
@@ -168,31 +195,74 @@ export class HttpConnectorEditorComponent implements OnInit, OnDestroy {
     });
   }
 
-  private updateAuthValidators(
-    authType: string,
-    usernameControl: any,
-    passwordControl: any,
-    tokenControl: any,
-    apiKeyControl: any,
-    apiKeyHeaderControl: any
-  ): void {
-    const usernameValidators = authType === 'BASIC' ? [Validators.required] : [];
-    const passwordValidators = authType === 'BASIC' ? [Validators.required] : [];
-    const tokenValidators = authType === 'BEARER' ? [Validators.required] : [];
-    const apiKeyValidators = authType === 'API_KEY' ? [Validators.required] : [];
-    const apiKeyHeaderValidators = authType === 'API_KEY' ? [Validators.required] : [];
-
-    usernameControl.setValidators(usernameValidators);
-    passwordControl.setValidators(passwordValidators);
-    tokenControl.setValidators(tokenValidators);
-    apiKeyControl.setValidators(apiKeyValidators);
-    apiKeyHeaderControl.setValidators(apiKeyHeaderValidators);
-
-    usernameControl.updateValueAndValidity();
-    passwordControl.updateValueAndValidity();
-    tokenControl.updateValueAndValidity();
-    apiKeyControl.updateValueAndValidity();
-    apiKeyHeaderControl.updateValueAndValidity();
+  private updateAuthValidators(authType: string): void {
+    // Clear all validators first
+    const fieldsToUpdate = [
+      'username', 'password', 'apiKey', 'bearerToken',
+      'clientKeystoreFile', 'clientKeystorePassword', 'clientKeyPassword',
+      'clientId', 'clientSecret', 'issuer', 'authorizationEndpoint',
+      'tokenEndpoint', 'redirectUri'
+    ];
+    
+    fieldsToUpdate.forEach(field => {
+      const control = this.httpConnectorForm.get(field);
+      if (control) {
+        control.clearValidators();
+        control.updateValueAndValidity();
+      }
+    });
+    
+    // Set validators based on auth type
+    switch (authType) {
+      case 'HTTP':
+        // HTTP can optionally use basic auth
+        break;
+        
+      case 'HTTPS_BASIC':
+        this.setRequiredValidator('username');
+        this.setRequiredValidator('password');
+        break;
+        
+      case 'HTTPS_API_KEY':
+        this.setRequiredValidator('apiKey');
+        break;
+        
+      case 'HTTPS_BEARER':
+        this.setRequiredValidator('bearerToken');
+        break;
+        
+      case 'HTTPS_CLIENT_CERT':
+        this.setRequiredValidator('clientKeystoreFile');
+        this.setRequiredValidator('clientKeystorePassword');
+        break;
+        
+      case 'HTTPS_OIDC':
+        this.setRequiredValidator('clientId');
+        this.setRequiredValidator('clientSecret');
+        this.setRequiredValidator('issuer');
+        this.setRequiredValidator('authorizationEndpoint');
+        this.setRequiredValidator('tokenEndpoint');
+        this.setRequiredValidator('redirectUri');
+        break;
+    }
+  }
+  
+  private setRequiredValidator(fieldName: string): void {
+    const control = this.httpConnectorForm.get(fieldName);
+    if (control) {
+      control.setValidators([Validators.required]);
+      control.updateValueAndValidity();
+    }
+  }
+  
+  onFileChange(event: Event, fieldName: string): void {
+    const input = event.target as HTMLInputElement;
+    if (input.files && input.files.length > 0) {
+      const file = input.files[0];
+      this.httpConnectorForm.patchValue({
+        [fieldName]: file
+      });
+    }
   }
 
   private loadConnector(id: number): void {

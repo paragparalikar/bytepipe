@@ -7,7 +7,7 @@ import { CreatedByComponent } from "../user/created-by/created-by.component";
 
 @Component({
   selector: 'app-data-flow',
-  imports: [NgFor, DataflowEditorComponent, CreatedByComponent],
+  imports: [DataflowEditorComponent, CreatedByComponent],
   templateUrl: './data-flow.component.html',
   styleUrl: './data-flow.component.css'
 })
