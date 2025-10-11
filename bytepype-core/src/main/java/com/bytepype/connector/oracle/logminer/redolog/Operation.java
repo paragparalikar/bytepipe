@@ -1,4 +1,4 @@
-package com.bytepype.connector.oracle.logminer;
+package com.bytepype.connector.oracle.logminer.redolog;
 
 public enum Operation {
 
