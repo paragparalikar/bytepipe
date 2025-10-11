@@ -109,6 +109,11 @@ export class OracleConnectorEditorComponent {
         this.connectorService.findById(id).subscribe(connector => {
           this.oracleConnectorForm.patchValue(connector);
         });
+      } else {
+        // Reset form with default values for new connector
+        this.oracleConnectorForm.patchValue({
+          authType: 'BASIC_PASSWORD'
+        });
       }
     }
   }
