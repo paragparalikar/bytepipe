@@ -1,0 +1,9 @@
+package com.bytepype.connector.oracle.logminer;
+
+public enum Operation {
+
+    INSERT, DIRECT_INSERT, UPDATE, DELETE, DDL, START, COMMIT, ROLLBACK,
+    LOB_WRITE, LOB_TRIM, LOB_ERASE, SEL_LOB_LOCATOR,
+    SELECT_FOR_UPDATE, MISSING_SCN, INTERNAL, UNSUPPORTED;
+
+}
