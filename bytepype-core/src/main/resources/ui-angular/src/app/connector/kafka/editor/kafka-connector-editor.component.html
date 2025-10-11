@@ -2,8 +2,8 @@
   <div class="flex">
     <div class="absolute inset-0 bg-gray-500 opacity-75 z-0"></div>
     <div class="absolute inset-0 place-items-center place-content-center z-10">
-      <form [formGroup]="kafkaConnectorForm" class="card h-fit w-200 [&>div]:flex [&>div]:items-center [&>div]:py-2">
-        <div class="flex justify-between">
+      <form [formGroup]="kafkaConnectorForm" class="card w-180 h-140 flex flex-col">
+        <div class="flex justify-between items-center py-2">
           <p class="flex text-3xl pb-3">
             <img class="mr-2" src="kafka.svg" height="30" width="30" alt="connection-type-icon"/> {{id ? 'Modify Kafka Connector' : 'Create New Kafka Connector'}}
           </p>
@@ -14,8 +14,10 @@
 
         
 
+        <!-- Scrollable Content Area -->
+        <div class="overflow-y-auto flex-1 px-4 [&>div]:flex [&>div]:items-center [&>div]:py-2">
         <!-- Tab Navigation -->
-        <div class="flex border-b border-gray-200 -mx-4 px-4">
+        <div class="flex border-b border-gray-200 mb-4">
           <button 
             type="button"
             (click)="switchTab('details')" 
@@ -208,6 +210,9 @@
             </div>
           </div>
         }
+        
+        </div>
+        <!-- End Scrollable Content Area -->
 
         <hr class="hruler">
 
