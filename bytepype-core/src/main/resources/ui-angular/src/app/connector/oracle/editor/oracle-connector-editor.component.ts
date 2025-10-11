@@ -8,7 +8,7 @@ import { MessageService } from '../../../navbar/message-bar/message.service';
 import { Observable, Subject } from 'rxjs';
 
 interface AuthTypeOption {
-  value: 'BASIC_PASSWORD' | 'KERBEROS' | 'RADIUS' | 'TLS_SSL_PKI' | 'PROXY' | 'MFA' | 'EXTERNAL_WALLET';
+  value: 'BASIC_PASSWORD' | 'KERBEROS' | 'TLS_SSL_PKI' | 'PROXY';
   label: string;
   icon: string;
   description: string;
@@ -16,7 +16,7 @@ interface AuthTypeOption {
 
 @Component({
   selector: 'app-oracle-connector-editor',
-  imports: [CommonModule, ErrorComponent, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './oracle-connector-editor.component.html',
   styleUrl: './oracle-connector-editor.component.css',
   
@@ -38,11 +38,8 @@ export class OracleConnectorEditorComponent {
   authTypes: AuthTypeOption[] = [
     { value: 'BASIC_PASSWORD', label: 'Basic Password Authentication', icon: 'fa-key', description: 'Standard database authentication using username and password' },
     { value: 'KERBEROS', label: 'Kerberos Authentication', icon: 'fa-ticket-alt', description: 'Network-based SSO using Kerberos tickets' },
-    { value: 'RADIUS', label: 'RADIUS Authentication', icon: 'fa-shield-alt', description: 'Centralized authentication via RADIUS server' },
     { value: 'TLS_SSL_PKI', label: 'TLS/SSL with Certificate (PKI)', icon: 'fa-certificate', description: 'Strong authentication using X.509 certificates' },
-    { value: 'PROXY', label: 'Proxy Authentication', icon: 'fa-user-shield', description: 'Middle-tier application connecting on behalf of client' },
-    { value: 'MFA', label: 'Multifactor Authentication (MFA)', icon: 'fa-mobile-alt', description: 'Enhanced security with second factor verification' },
-    { value: 'EXTERNAL_WALLET', label: 'External Password Store (Wallet)', icon: 'fa-wallet', description: 'Secure credential storage using Oracle wallet' }
+    { value: 'PROXY', label: 'Proxy Authentication', icon: 'fa-user-shield', description: 'Middle-tier application connecting on behalf of client' }
   ];
 
   oracleConnectorForm!: FormGroup;
@@ -66,10 +63,7 @@ export class OracleConnectorEditorComponent {
       // Basic Information
       name: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(255)]],
       description: ['', Validators.maxLength(255)],
-      host: ['', [Validators.required, Validators.minLength(1)]],
-      port: [1521, [Validators.required, Validators.min(1), Validators.max(65535)]],
-      sidServiceName: ['', [Validators.required, Validators.minLength(1)]],
-      tnsAlias: [''],
+      url: ['', [Validators.required, Validators.minLength(1)]],
       authType: ['BASIC_PASSWORD'],
       
       // Basic Password Authentication
@@ -83,11 +77,6 @@ export class OracleConnectorEditorComponent {
       kerberosConfigFile: [null],
       realm: [''],
       sqlnetAuthenticationServices: [''],
-      
-      // RADIUS Authentication
-      radiusServerHost: [''],
-      radiusServerPort: [1812],
-      sharedSecret: [''],
       
       // TLS/SSL PKI Authentication
       distinguishedName: [''],
@@ -103,17 +92,7 @@ export class OracleConnectorEditorComponent {
       clientUsername: [''],
       clientPassword: [''],
       roles: [''],
-      certificateFile: [null],
-      
-      // MFA Authentication
-      secondFactorType: [''],
-      email: [''],
-      mfaServerDetails: [''],
-      clientIdSecret: [''],
-      
-      // External Wallet
-      credentialAlias: [''],
-      sqlnetWalletOverride: [true]
+      certificateFile: [null]
     });
     
     this.setupAuthTypeControls();
@@ -195,11 +174,8 @@ export class OracleConnectorEditorComponent {
     const fieldsToUpdate = [
       'username', 'password', 'sqlnetAllowedLogonVersionClient',
       'kerberosPrincipal', 'keytabFile', 'kerberosConfigFile', 'realm', 'sqlnetAuthenticationServices',
-      'radiusServerHost', 'radiusServerPort', 'sharedSecret',
       'distinguishedName', 'walletFile', 'walletPassword', 'caCertificateFile', 'sslVersion',
-      'proxyUsername', 'proxyPassword', 'clientUsername', 'clientPassword', 'roles', 'certificateFile',
-      'secondFactorType', 'email', 'mfaServerDetails', 'clientIdSecret',
-      'credentialAlias', 'sqlnetWalletOverride'
+      'proxyUsername', 'proxyPassword', 'clientUsername', 'clientPassword', 'roles', 'certificateFile'
     ];
     
     fieldsToUpdate.forEach(field => {
@@ -223,15 +199,6 @@ export class OracleConnectorEditorComponent {
         this.setRequiredValidator('sqlnetAuthenticationServices');
         break;
         
-      case 'RADIUS':
-        this.setRequiredValidator('username');
-        this.setRequiredValidator('password');
-        this.setRequiredValidator('radiusServerHost');
-        this.setRequiredValidator('radiusServerPort');
-        this.setRequiredValidator('sharedSecret');
-        this.setRequiredValidator('sqlnetAuthenticationServices');
-        break;
-        
       case 'TLS_SSL_PKI':
         this.setRequiredValidator('distinguishedName');
         this.setRequiredValidator('walletFile');
@@ -241,17 +208,6 @@ export class OracleConnectorEditorComponent {
       case 'PROXY':
         this.setRequiredValidator('proxyUsername');
         this.setRequiredValidator('clientUsername');
-        break;
-        
-      case 'MFA':
-        this.setRequiredValidator('username');
-        this.setRequiredValidator('password');
-        this.setRequiredValidator('secondFactorType');
-        break;
-        
-      case 'EXTERNAL_WALLET':
-        this.setRequiredValidator('walletFile');
-        this.setRequiredValidator('credentialAlias');
         break;
     }
   }
